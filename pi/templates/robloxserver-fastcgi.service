@@ -1,0 +1,16 @@
+[Unit]
+Description=RobloxServer ASP.NET (fastcgi-mono-server4)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=@SITE_DIR@
+Environment=MONO_GC_PARAMS=nursery-size=4m
+ExecStart=/usr/bin/fastcgi-mono-server4 /applications=/:@SITE_DIR@ /socket=tcp:127.0.0.1:9000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

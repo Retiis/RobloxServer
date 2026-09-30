@@ -1,0 +1,39 @@
+/* 2013 "BlueCity" landing page (Landing/BlueCity/Landing.css, Accounts/AnimatedSignup.css and
+   LandingSignUp.css from the RobloxLabs 2013 website, MIT license), adapted to this site. */
+html { background: #123f83; }
+body { margin: 0; background: #123f83 url(../../Images/Landing/background_city.jpg) repeat-x; padding-top: 35px; font-family: Arial, Helvetica, sans-serif; color: #fff; }
+#Container { background: url(../../Images/Landing/forground_city.png) repeat-x; min-height: 840px; }
+#Experimental { height: 750px; width: 900px; margin: auto; }
+#Experimental .Content { min-height: 252px; padding: 8px; margin-bottom: 0; border-bottom: none; }
+#animatedHeader { color: white; font-weight: bold; margin-bottom: 25px; margin-top: -20px; text-align: center; width: 900px; }
+#headerLogo { margin: auto; width: 188px; }
+#headerTextTop { font-size: 60px; letter-spacing: -2px; margin: 8px auto 0; width: 900px; white-space: nowrap; text-align: center; }
+#headerTextBottom { font-size: 40px; width: 900px; margin: auto; }
+#animatedBody { margin: auto; width: 900px; height: 509px; position: relative; }
+.slogan-container { text-align: center; }
+#slogan { font-size: 28px; color: white; font-weight: bold; letter-spacing: -1px; margin: 10px auto 0; white-space: nowrap; }
+#Experimental .VideoContainer { position: absolute; left: 60px; top: 0; width: 381px; padding: 0 5px; }
+#Experimental .VideoContainer img, #Experimental .VideoContainer iframe { display: block; border: 0; }
+#animated-wrapper { position: absolute; left: 470px; top: 0; background: url(../../Images/Landing/bluepixel.png); color: white; padding: 20px 30px; }
+#animated-wrapper a, #animated-wrapper a:visited { color: white; }
+.animated-tab { font-size: 18px; font-weight: normal; color: #9CF; cursor: pointer; }
+.animated-tab-selected { color: white; font-size: 20px; font-weight: bold; }
+#login-footer { text-align: center; font-size: 13px; }
+.sign-up-row { margin-bottom: 5px; font-size: 14px; font-weight: bold; }
+.sign-up-inner-row { margin-bottom: 3px; width: 240px; }
+.sign-up-description { font-size: 12px; font-weight: normal; }
+#lstMonths { width: 95px; }
+#lstDays { width: 55px; margin-left: 10px; }
+#lstYears { width: 65px; margin-left: 10px; }
+.error { color: #FF7373; }
+.required-text { float: right; }
+.good-text { float: right; color: #DAFF7F; }
+.sign-up-row .text-box { width: 235px; }
+#animated-wrapper .btn-large { width: 241px; margin-top: 3px; }
+#animated-wrapper label { font-weight: normal; }
+.Footer.Experimental { clear: both; background-color: #123f83; color: #899fc1; width: 100%; font-size: 12px; padding: 10px 0; }
+.Footer.Experimental a { color: white; }
+.FooterContent { width: 970px; margin: 0 auto; overflow: hidden; }
+.FooterParagraph { float: left; margin-top: 31px; color: #899fc1; }
+.FooterLegaleseContainer { float: right; width: 630px; padding: 10px 0 10px 20px; text-align: left; border-left: 1px solid #335d99; }
+div.Experimental p.Legalese { font-size: 10px; padding: 0; line-height: 20px; margin: 0; }

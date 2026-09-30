@@ -1,0 +1,129 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="RobloxServer.SiteMaster" %>
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1000" />
+    <title><%: Page.Title %> - <%: RobloxServer.Config.SiteName %></title>
+    <link rel="icon" type="image/vnd.microsoft.icon" href="<%: ResolveUrl("~/favicon.ico") %>" />
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" runat="server" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
+</head>
+<body>
+    <form id="MainForm" runat="server">
+        <div id="MasterContainer">
+            <div class="site-header">
+                <div id="navigation-container">
+                    <a href="<%: ResolveUrl("~/") %>" class="btn-logo" title="<%: RobloxServer.Config.SiteName %>"></a>
+                    <div id="navigation-menu">
+                        <ul>
+                            <li><a href="<%: ResolveUrl("~/") %>">Home</a></li>
+                            <li><a href="<%: ResolveUrl("~/Games") %>" title="Games">Games</a></li>
+                            <li><a href="<%: ResolveUrl("~/Develop.aspx") %>" title="Build">Build</a></li>
+                            <li class="more-list-item">
+                                <div class="more-link-container"><a id="nav-more" title="More">More<span id="more-menu-toggle"></span></a></div>
+                                <div class="dropdownnavcontainer">
+                                    <div class="dropdownmainnav">
+                                        <a class="dropdownoption" href="<%: ResolveUrl("~/Develop.aspx") %>"><span>My Places</span></a>
+                                        <a class="dropdownoption" href="<%: ResolveUrl("~/Browse.aspx") %>"><span>People</span></a>
+                                        <a class="dropdownoption" href="<%: ResolveUrl("~/Install/Download.ashx?client=Launcher") %>"><span>Download ROBLOX</span></a>
+                                        <asp:PlaceHolder ID="AdminLink" runat="server" Visible="false">
+                                            <a class="dropdownoption" href="<%: ResolveUrl("~/Admin.aspx") %>"><span>Admin</span></a>
+                                        </asp:PlaceHolder>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <asp:PlaceHolder ID="LoggedIn" runat="server" Visible="false">
+                        <div id="AlertSpace">
+                            <div class="AlertItem">
+                                <asp:LinkButton ID="LogoutButton" runat="server" CssClass="logoutButton" OnClick="LogoutButton_Click" CausesValidation="false">Logout</asp:LinkButton>
+                            </div>
+                            <div class="HeaderDivider"></div>
+                            <a href="<%: ResolveUrl("~/My/Home.aspx") %>">
+                                <div id="AuthenticatedUserNameWrapper">
+                                    <div id="AuthenticatedUserName">
+                                        <span class="login-span">
+                                            <asp:PlaceHolder ID="Over13Icon" runat="server"><img id="over13icon" src="<%: ResolveUrl("~/Images/Icons/over13.png") %>" alt="13+" title="13+" /></asp:PlaceHolder>
+                                            <asp:Literal ID="UserNameLiteral" runat="server" />
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </asp:PlaceHolder>
+                    <asp:PlaceHolder ID="LoggedOut" runat="server">
+                        <div id="header-login-container">
+                            <a id="header-signup" href="<%: ResolveUrl("~/Register.aspx") %>">Sign Up</a>
+                            <span id="header-or">or</span>
+                            <a id="header-login" class="btn-control btn-control-large" href="<%: ResolveUrl("~/Login.aspx") %>">Login <span class="grey-arrow">&#9660;</span></a>
+                        </div>
+                    </asp:PlaceHolder>
+                </div>
+            </div>
+            <div class="forceSpace">&nbsp;</div>
+            <asp:PlaceHolder ID="SubMenu" runat="server" Visible="false">
+                <div class="mySubmenuFixed">
+                    <div id="subMenu" class="subMenu">
+                        <ul>
+                            <li><a href="<%: ResolveUrl("~/My/Home.aspx") %>">Home</a></li>
+                            <li><a href="<%: ResolveUrl("~/User.aspx") %>">Profile</a></li>
+                            <li><a href="<%: ResolveUrl("~/My/Character.aspx") %>">Character</a></li>
+                            <li><a href="<%: ResolveUrl("~/Develop.aspx") %>">Places</a></li>
+                            <li><a href="<%: ResolveUrl("~/Browse.aspx") %>">People</a></li>
+                            <li><a href="<%: ResolveUrl("~/Install/Download.ashx?client=Launcher") %>">Download</a></li>
+                            <asp:PlaceHolder ID="AdminSubLink" runat="server" Visible="false">
+                                <li><a href="<%: ResolveUrl("~/Admin.aspx") %>">Admin</a></li>
+                            </asp:PlaceHolder>
+                        </ul>
+                    </div>
+                </div>
+                <div class="forceSpaceUnderSubmenu">&nbsp;</div>
+            </asp:PlaceHolder>
+
+            <div id="BodyWrapper">
+                <div id="RepositionBody">
+                    <div id="Body">
+                        <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+                        <div style="clear: both"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="Footer" class="footer-container">
+                <div class="FooterNav">
+                    <a href="<%: ResolveUrl("~/Games") %>"><b>Games</b></a>
+                    &nbsp;|&nbsp;
+                    <a href="<%: ResolveUrl("~/Develop.aspx") %>">Build</a>
+                    &nbsp;|&nbsp;
+                    <a href="<%: ResolveUrl("~/Browse.aspx") %>">People</a>
+                    &nbsp;|&nbsp;
+                    <a href="<%: ResolveUrl("~/Register.aspx") %>">Sign Up</a>
+                    &nbsp;|&nbsp;
+                    <a href="<%: ResolveUrl("~/Login.aspx") %>">Login</a>
+                    &nbsp;|&nbsp;
+                    <a href="<%: ResolveUrl("~/Install/Download.ashx?client=Launcher") %>">Download ROBLOX</a>
+                    &nbsp;|&nbsp;
+                    <a href="https://github.com/V0rtexLinux/RobloxServer">Source Code</a>
+                </div>
+                <div class="FooterNav">
+                    <div class="SEOGenreLinks">
+                        <asp:Repeater ID="GenreLinks" runat="server">
+                            <SeparatorTemplate><span>|</span></SeparatorTemplate>
+                            <ItemTemplate><a href="<%# ResolveUrl("~/Games?genre=" + Eval("Key")) %>"><%# Eval("Name") %></a></ItemTemplate>
+                        </asp:Repeater>
+                    </div>
+                </div>
+                <div class="legal">
+                    <p class="Legalese">
+                        <%: RobloxServer.Config.SiteName %> is a fan-made private server running on ASP.NET <%: Environment.Version %>.
+                        ROBLOX, "Online Building Toy", characters, logos, names, and all related indicia are trademarks of ROBLOX Corporation.
+                        This site is not sponsored, authorized or endorsed by ROBLOX Corporation. Not affiliated with Roblox Corporation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

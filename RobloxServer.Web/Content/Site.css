@@ -1,0 +1,246 @@
+/*
+ * ROBLOX 2013 look: the "RevisedHeader" blue bar with the red ROBLOX logo, the black user submenu,
+ * a white 970px page and the dark blue footer. Rules and images come from the 2013 site
+ * (Navigation.css, StyleGuide.css, Footer.css, Games.css).
+ */
+
+/* ----------------- Base ----------------- */
+
+html { background: #123f83; }
+body { margin: 0; padding: 0; background: #123f83; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #343434; min-width: 970px; }
+form { margin: 0; }
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:link, a:visited, a:active { color: #0055b3; }
+a img { border: none; }
+input:focus { outline: none; }
+h1 { font-size: 32px; font-weight: bold; margin: 12px 0; color: #343434; letter-spacing: -1px; }
+h2 { font-size: 24px; font-weight: bold; margin: 16px 0 8px; color: #343434; letter-spacing: -1px; }
+h2.title { margin: 20px 0 10px; }
+h2.light { font-size: 16px; font-weight: normal; color: #000; letter-spacing: 0; }
+h3 { font-size: 15px; font-weight: bold; color: #343434; }
+p { line-height: 1.428; }
+code, .mono { font-family: Consolas, "Courier New", monospace; font-size: 11px; word-break: break-all; }
+.tip-text { padding-top: 2px; color: #666; display: block; font-size: 11px; }
+
+#MasterContainer { overflow: visible; width: 100%; }
+.forceSpace { display: block; width: 100%; height: 36px; background: #fff; }
+.forceSpaceUnderSubmenu { display: block; width: 100%; height: 25px; background: #fff; }
+#BodyWrapper { background: #fff; width: 100%; }
+#RepositionBody { width: 970px; margin: 0 auto; }
+#Body { width: 970px; min-height: 550px; padding: 5px 0 25px 0; margin: 0 auto; background: #fff; box-sizing: border-box; }
+
+/* ----------------- Header (Navigation.css) ----------------- */
+
+.site-header { background: #114081 url(../Images/RevisedHeader/bg-rbx_header.png) repeat-x; height: 36px; position: fixed; width: 100%; min-width: 970px; z-index: 10001; top: 0; left: 0; }
+#navigation-container { text-align: left; position: relative; height: 36px; width: 970px; margin: 0 auto; }
+#navigation-container a.btn-logo { background: url(../Images/RevisedHeader/btn-rbx_logo.png) no-repeat top; display: block; width: 116px; height: 35px; float: left; margin-right: 4px; }
+#navigation-container a.btn-logo:hover { background-position: bottom; }
+#navigation-container a:hover { text-decoration: none; }
+
+#navigation-menu { float: left; height: 36px; line-height: 20px; }
+#navigation-menu ul { margin: 0; padding: 0; }
+#navigation-menu li { float: left; list-style: none; margin: 0; padding: 7px 7px 0 7px; height: 29px; cursor: pointer; position: relative; }
+#navigation-menu li:hover, #navigation-container #AuthenticatedUserNameWrapper:hover, #navigation-container .AlertItem:hover { background: url(../Images/RevisedHeader/bg-main_menu_hover.png) repeat-x; }
+#navigation-menu li a, #navigation-menu li a:visited, #navigation-menu li a:link { display: inline-block; color: #fff; font-size: 14px; font-weight: bold; text-decoration: none; }
+
+.more-list-item span#more-menu-toggle { background: url(../Images/Buttons/bg-drop_down_arrow.png) top no-repeat; height: 5px; width: 7px; display: inline-block; margin-left: 4px; position: relative; top: -2px; }
+#navigation-menu li.more-list-item:hover { background: #efefef; }
+#navigation-menu li.more-list-item:hover #nav-more { color: #000; }
+#navigation-menu li.more-list-item:hover span#more-menu-toggle { background-position: bottom; }
+#navigation-menu .dropdownnavcontainer { display: none; position: absolute; top: 36px; left: 0; z-index: 1023; }
+#navigation-menu li.more-list-item:hover .dropdownnavcontainer { display: block; }
+#navigation-menu .dropdownmainnav { background-color: #efefef; border: 1px solid #777; border-top: none; white-space: nowrap; min-width: 130px; }
+#navigation-menu .dropdownmainnav a, #navigation-menu .dropdownmainnav a:link, #navigation-menu .dropdownmainnav a:visited { color: #000; font-size: 13px; font-weight: normal; line-height: 23px; display: block; }
+#navigation-menu .dropdownmainnav a:hover { background-color: #d8d8d8; }
+.dropdownmainnav .dropdownoption span { padding: 1px 10px 1px 7px; }
+
+#navigation-container #AlertSpace { float: right; height: 36px; }
+#navigation-container .AlertItem { float: right; padding: 0 6px; height: 36px; line-height: 36px; cursor: pointer; }
+#navigation-container .logoutButton, #navigation-container .logoutButton:link, #navigation-container .logoutButton:visited { color: #fff; font-size: 11px; }
+#navigation-container .HeaderDivider { margin: 6px 4px 0 4px; float: right; height: 25px; width: 0; border-left: 1px solid #7394c1; }
+#navigation-container #AuthenticatedUserNameWrapper { float: right; height: 36px; line-height: 36px; padding: 0 6px; cursor: pointer; }
+#navigation-container #AuthenticatedUserName { color: #fff; font-size: 12px; font-weight: bold; max-width: 160px; overflow: hidden; white-space: nowrap; }
+#navigation-container #over13icon { vertical-align: middle; padding-right: 5px; }
+
+#header-login-container { float: right; height: 36px; line-height: 36px; color: #fff; }
+#header-login-container #header-signup, #header-login-container #header-signup:visited { color: #fff; font-weight: bold; font-size: 14px; }
+#header-login-container #header-or { color: #c9d6ea; font-size: 12px; margin: 0 6px; }
+#header-login-container #header-login { font-weight: bold; }
+#header-login-container .grey-arrow { color: #777; font-size: 9px; position: relative; top: -1px; }
+
+/* Black user submenu */
+.mySubmenuFixed { position: fixed; top: 36px; left: 0; width: 100%; min-width: 970px; height: 25px; background-color: #191919; z-index: 10000; }
+.subMenu { background: #191919; color: #fff; height: 25px; margin: 0 auto; position: relative; width: 970px; }
+.subMenu ul { list-style-type: none; margin: 0 0 0 110px; padding: 0; }
+.subMenu ul li { float: left; height: 25px; margin: 0 2px; position: relative; }
+.subMenu ul li:hover { background: url(../Images/RevisedHeader/bg-sub_menu_hover.png) repeat-x; }
+.subMenu a, .subMenu a:link, .subMenu a:visited { color: #fff; display: block; padding: 5px; font-size: 12px; font-weight: bold; line-height: 15px; }
+.subMenu a:hover { text-decoration: none; }
+
+/* ----------------- Footer (Footer.css) ----------------- */
+
+#Footer.footer-container { background: #123f83; text-align: center; font-size: 13px; color: #aaa; margin: 0; width: 100%; padding: 2em 0 0 0; }
+#Footer.footer-container a, #Footer.footer-container a:link, #Footer.footer-container a:visited, #Footer.footer-container .FooterNav { color: #fff; }
+#Footer.footer-container .FooterNav { width: 970px; margin: 0 auto; }
+#Footer .SEOGenreLinks { padding: 1em 0 2em 0; font-size: 11px; }
+#Footer .SEOGenreLinks span { margin: 0 5px; color: #fff; }
+#Footer.footer-container .legal { border-top: 1px solid #355c95; padding-top: 20px; width: 900px; margin: 0 auto; text-align: left; }
+#Footer.footer-container .Legalese { color: #899fc1; font-size: 10px; line-height: 17px; margin: 0 0 10px 5px; }
+
+/* ----------------- Buttons (StyleGuide.css) ----------------- */
+
+.btn-control, .btn-control:active, .btn-control:link, .btn-control:visited, .btn-control:hover { border: 1px solid #777; padding: 0 6px; color: #000; text-decoration: none; background-color: #ccc; text-align: center; font-weight: normal; cursor: pointer; background-position: top; display: inline-block; font-family: Arial, Helvetica, sans-serif; }
+.btn-control:hover { background-position: bottom; border-color: #888; }
+.btn-control.btn-control-small { height: 18px; line-height: 18px; font-size: 11px; background-image: url(../Images/Buttons/btn-control-small-tile.png); }
+.btn-control.btn-control-medium { height: 21px; line-height: 21px; font-size: 12px; background-image: url(../Images/Buttons/btn-control-medium-tile.png); }
+.btn-control.btn-control-large { height: 25px; line-height: 24px; font-size: 13px; padding: 0 7px; background-image: url(../Images/Buttons/btn-control-large-tile.png); }
+
+.btn-large, .btn-medium, .btn-small { box-sizing: content-box; margin: 0; display: inline-block; text-align: center; font-family: Arial, Helvetica, sans-serif; font-weight: bold; text-decoration: none; border-width: 1px; border-style: solid; cursor: pointer; vertical-align: middle; }
+.btn-large:hover, .btn-medium:hover, .btn-small:hover { text-decoration: none; }
+.btn-large { padding: 9px 13px 0 13px; height: 39px; min-width: 70px; font-size: 23px; line-height: 27px; background-position: left 0; }
+.btn-large:hover { background-position: left -48px; }
+.btn-medium { padding: 1px 13px 3px 13px; height: 28px; min-width: 62px; font-size: 20px; line-height: 28px; background-position: left -96px; }
+.btn-medium:hover { background-position: left -128px; }
+.btn-small { padding: 1px 7px 0 7px; height: 20px; min-width: 40px; font-size: 14px; line-height: 18px; background-position: left -160px; }
+.btn-small:hover { background-position: left -181px; }
+input.btn-large { padding: 0 13px; height: 48px; line-height: 48px; }
+input.btn-medium { padding: 0 13px; height: 32px; line-height: 32px; }
+input.btn-small { padding: 0 7px; height: 21px; line-height: 21px; }
+.btn-primary, .btn-primary:link, .btn-primary:active, .btn-primary:visited { border-color: #007001; background-color: #007001; background-image: url(../Images/Buttons/bg-btn-green.png); color: #fff; text-shadow: 0 -1px #013401; }
+.btn-neutral, .btn-neutral:link, .btn-neutral:active, .btn-neutral:visited { border-color: #0852b7; background-color: #0852b7; background-image: url(../Images/Buttons/bg-btn-blue.png); color: #fff; text-shadow: 0 -1px #013401; }
+.btn-negative, .btn-negative:link, .btn-negative:active, .btn-negative:visited { border-color: #565656; background-color: #565656; background-image: url(../Images/Buttons/bg-btn-gray.png); color: #fff; text-shadow: 0 -1px #013401; }
+.btn-play, .btn-play:link, .btn-play:active, .btn-play:visited { padding-left: 60px; min-width: 26px; border-color: #007001; background: url(../Images/Buttons/bg-lg-green-play.png) no-repeat left top; color: #fff; text-shadow: 0 -1px #013401; }
+.btn-play:hover { background-position: left -48px; }
+
+/* ----------------- Boxes, forms, tables ----------------- */
+
+.StandardBoxHeader { background: #e1e1e1; border: 1px solid #bcbcbc; padding: 5px 10px; font-size: 15px; font-weight: bold; color: #343434; }
+.StandardBox { border: 1px solid #bcbcbc; border-top: none; padding: 10px; background: #fff; }
+.StandardBox > p:first-child { margin-top: 0; }
+.PageBox { margin: 10px 0 20px; }
+.SystemAlert { background: #fffbe0; border: 1px solid #e8d77a; padding: 8px 10px; margin: 8px 0; font-size: 13px; }
+.notice { background: #fffbe0; border: 1px solid #e8d77a; padding: 8px; margin: 8px 0; }
+.error { color: #c00; display: block; margin: 8px 0; font-weight: bold; }
+.error:empty { display: none; }
+
+.form-row { margin-bottom: 10px; }
+.form-row label { display: block; font-weight: bold; font-size: 13px; margin-bottom: 3px; }
+.form-row input[type=checkbox] + label { display: inline; font-weight: normal; margin-right: 12px; }
+.text-box { border: 1px solid #a7a7a7; padding: 0 3px; font-weight: normal; font-family: Arial, Helvetica, sans-serif; width: 300px; box-sizing: content-box; }
+.text-box.text-box-medium { height: 21px; font-size: 12px; line-height: 19px; }
+.text-box.text-box-large { height: 25px; font-size: 13px; line-height: 24px; }
+.text-box.short { width: 50px; }
+textarea.text-box { width: 400px; height: 80px; padding: 3px; font-size: 12px; }
+select { font-family: Arial, Helvetica, sans-serif; font-size: 12px; }
+
+table.table { border-collapse: collapse; width: 100%; border-top: 1px solid #9e9e9e; margin-bottom: 10px; }
+.table td, .table th { padding: 5px; border-top: 1px solid #ccc; margin: 0; text-align: left; font-size: 12px; }
+.table-header th { border-left: 1px solid #ccc; font-weight: bold; background-color: #f1f1f1; border-top: none; }
+.table-header th.first { border-left: 1px solid #f1f1f1; }
+.table td img { vertical-align: middle; }
+
+/* ----------------- Games page (Games.css) ----------------- */
+
+#GamesContainer { font-family: Arial, Helvetica, sans-serif; padding-top: 10px; }
+#GamesContainer .GameFilter { float: left; width: 150px; margin-left: 20px; color: #555; font-size: 13px; }
+.GameFilterGroup { margin-bottom: 18px; }
+.GameFilterTitle { font-size: 14px; font-weight: bold; color: #343434; margin-bottom: 4px; }
+.GameFilter ul { list-style-type: none; padding-left: 0; margin: 0; }
+.GameFilter ul li { margin: 0 0 3px; }
+.GameFilter a.GamesSort, .GameFilter a.GamesGenre { padding-left: 12px; display: inline-block; font-size: 13px; }
+.GameFilter a.SelectedSort, .GameFilter a.SelectedGenre { background: url(../Images/Icons/gamesPage_filterArrow.png) no-repeat 0 2px; padding-left: 12px; display: inline-block; font-size: 13px; color: #343434; font-weight: bold; }
+
+#GamesContainer #Games { float: left; width: 752px; margin-left: 30px; }
+#GamesContainer .GamesHeader { border-bottom: 1px solid #ccc; padding: 4px 0 8px; margin-bottom: 30px; overflow: hidden; }
+#GamesContainer .GamesDisplaySet { float: left; font-size: 20px; font-weight: bold; color: #343434; letter-spacing: -1px; }
+#GamesContainer .GamesHint { float: right; color: #888; font-size: 11px; line-height: 24px; }
+#GamesContainer .GameList { overflow: hidden; }
+#GamesContainer .Game { float: left; width: 160px; height: 158px; margin: 0 24px 0 0; vertical-align: top; }
+#GamesContainer .Game:nth-child(4n) { margin-right: 0; }
+#GamesContainer .Game .GameThumbnail { display: block; width: 160px; height: 100px; overflow: hidden; }
+#GamesContainer .Game .GameThumbnail img { display: block; width: 160px; height: 100px; }
+#GamesContainer .Game .GameDetails { padding: 3px 0 0 0; width: 160px; }
+#GamesContainer .GameName { font-size: 12px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 16px; }
+#GamesContainer .GameInfo { height: 18px; line-height: 18px; font-size: 11px; }
+#GamesContainer .PlayersOnline { float: left; color: #36a400; }
+#GamesContainer .PlayersOnline .PlayerCount { color: #343434; }
+#GamesContainer .GameIcons { float: right; height: 16px; }
+.GenreIcon, .GearIcon { width: 16px; height: 16px; vertical-align: middle; margin-left: 1px; }
+
+/* ----------------- Place page ----------------- */
+
+#ItemContainer { padding: 0 10px; }
+#ItemContainer h1.ItemTitle { margin: 10px 0 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#ItemContainer .ItemBuilder { color: #555; font-size: 13px; margin-bottom: 12px; }
+#ItemContainer .ItemLeft { float: left; width: 422px; }
+#ItemContainer .ItemThumbnail { border: 1px solid #ccc; width: 420px; height: 230px; }
+#ItemContainer .ItemThumbnail img { display: block; }
+#ItemContainer .ItemDescription { margin-top: 12px; }
+#ItemContainer .DescriptionText { white-space: pre-wrap; margin: 0; min-height: 40px; font-size: 12px; }
+#ItemContainer .ItemRight { margin-left: 450px; }
+#ItemContainer .PlayInstructions { margin: 12px 0; padding: 8px 10px; background: #f1f1f1; border: 1px solid #ccc; font-size: 12px; line-height: 1.5; }
+#ItemContainer .PlayInstructions:target { background: #fffbe0; border-color: #e8d77a; }
+#ItemContainer table.ItemDetails { border-collapse: collapse; font-size: 12px; }
+#ItemContainer table.ItemDetails td { padding: 3px 10px 3px 0; }
+#ItemContainer table.ItemDetails .GenreIcon { margin: 0 3px 0 0; }
+#ItemContainer table.ItemDetails td.Label { color: #888; }
+#ItemContainer .ItemDownload { margin-top: 12px; }
+#ItemContainer .ItemTabs { border-bottom: 1px solid #ccc; margin-top: 25px; height: 30px; }
+#ItemContainer .ItemTab { float: left; padding: 0 18px; height: 29px; line-height: 29px; font-size: 14px; font-weight: bold; color: #555; border: 1px solid transparent; }
+#ItemContainer .ItemTab.SelectedTab { background: #fff; color: #343434; border-color: #ccc; border-bottom-color: #fff; }
+#ItemContainer .ItemTabContent { padding: 5px 0 10px; }
+
+/* ----------------- Login / Sign up ----------------- */
+
+.LoginPage { padding: 30px 40px; overflow: hidden; }
+.LoginPage .LoginColumn { float: left; width: 420px; }
+.LoginPage .SignupColumn { float: right; width: 400px; }
+.LoginPage .SignupColumn p { font-size: 13px; margin-top: 0; }
+.SignupPage { width: 520px; margin: 0 auto; padding-bottom: 20px; }
+.SignupPage .StandardBox { border-top: 1px solid #bcbcbc; padding: 15px 20px; }
+.SignupPage .SignupLogin { margin-bottom: 0; }
+
+#ErrorPage { text-align: center; padding: 60px 0; }
+#ErrorPage p { font-size: 14px; }
+
+/* ----------------- Place launcher (PlaceLauncherStatusPanel) ----------------- */
+
+#ItemContainer .HostButton { margin-left: 8px; }
+#ItemContainer .PlayInstructions .PlaceId { color: #888; }
+.PlaceLauncherOverlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 20000; }
+.PlaceLauncherModal { width: 300px; min-height: 160px; margin: 180px auto 0; background: #fff; border: 5px solid #6e99c9; padding: 20px; text-align: center; font-size: 14px; }
+.PlaceLauncherModal .Spinner { padding: 10px 0 15px; }
+.PlaceLauncherModal .PlaceLauncherStatus { min-height: 30px; font-weight: bold; color: #343434; }
+.PlaceLauncherModal .PlaceLauncherInstall { font-size: 12px; margin: 5px 0 12px; line-height: 1.5; }
+.Button { cursor: pointer; background-color: #fff; border: solid 1px #333; color: #333; font-size: 12px; padding: 3px 10px; }
+.Button:hover { background-color: #6e99c9; border-color: #000; color: #fff; }
+
+/* ----------------- Profile (User.aspx) and People (Browse.aspx) ----------------- */
+
+#ProfileContainer { padding: 10px; }
+#ProfileContainer .ProfileLeft { float: left; width: 300px; }
+#ProfileContainer .ProfileRight { margin-left: 320px; }
+#ProfileContainer .ProfileBox { text-align: center; }
+#ProfileContainer .ProfileStatus { font-size: 12px; margin-bottom: 4px; }
+#ProfileContainer .ProfileUrl { font-size: 11px; color: #888; margin-bottom: 8px; word-break: break-all; }
+#ProfileContainer .ProfileAvatar { display: block; margin: 0 auto 10px; }
+#ProfileContainer .ProfileBlurb { font-size: 12px; color: #343434; margin: 0 10px 10px; word-wrap: break-word; font-style: italic; }
+#ProfileContainer table.ProfileDetails { margin: 0 auto; border-collapse: collapse; font-size: 12px; text-align: left; }
+#ProfileContainer table.ProfileDetails td { padding: 2px 8px 2px 0; }
+#ProfileContainer table.ProfileDetails td.Label { color: #888; }
+#ProfileContainer .ProfileBadge { margin-top: 10px; font-size: 12px; font-weight: bold; color: #0852b7; }
+#ProfileContainer .ProfileEmpty { color: #888; font-size: 12px; margin: 0; }
+#ProfileContainer .ProfilePlace { overflow: hidden; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 12px; }
+#ProfileContainer .ProfilePlace:last-child { border-bottom: none; }
+#ProfileContainer .ProfilePlace img { float: left; border: 1px solid #ccc; }
+#ProfileContainer .ProfilePlaceDetails { margin-left: 175px; color: #555; }
+#ProfileContainer .ProfilePlaceName { font-size: 14px; font-weight: bold; margin-bottom: 3px; }
+#ProfileContainer .ProfilePlaceDescription { margin-top: 5px; white-space: pre-wrap; max-height: 48px; overflow: hidden; }
+.UserOnline { color: #36a400; }
+.UserOffline { color: #888; }
+
+#BrowseContainer { padding: 0 10px 10px; }
+#BrowseContainer .BrowseSearch { margin-bottom: 12px; }
+#BrowseContainer .BrowseSearch .text-box { width: 220px; vertical-align: middle; }
+#BrowseContainer .BrowseTable td.BrowseAvatar { width: 50px; }

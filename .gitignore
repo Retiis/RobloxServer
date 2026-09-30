@@ -1,1 +1,29 @@
-node_modules/
+# Visual Studio / MSBuild
+.vs/
+*.suo
+*.user
+RobloxServer.Web/bin/
+RobloxServer.Web/obj/
+packages/
+
+# Runtime data written by the site (users, places, keys, logs)
+RobloxServer.Web/App_Data/*.xml
+RobloxServer.Web/App_Data/*.tmp
+RobloxServer.Web/App_Data/Keys/
+RobloxServer.Web/App_Data/Logs/
+RobloxServer.Web/App_Data/Places/
+RobloxServer.Web/App_Data/Assets/
+RobloxServer.Web/App_Data/Settings/
+
+# Raspberry Pi render-only output
+pi/out/
+
+# RobloxPlayerLauncher packages (big binaries, uploaded by the admin)
+RobloxServer.Web/App_Data/Clients/
+RobloxServer.Web/App_Data/Launcher/
+
+# IniciarServidor.exe (built by RobloxServer.Starter, copied to the root in CI)
+RobloxServer.Starter/bin/
+RobloxServer.Starter/obj/
+/IniciarServidor.exe
+__pycache__/

@@ -1,0 +1,1072 @@
+From 03c19fbdcd438a6f38b7e0585d0811a78e8bdf93 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 30 Sep 2026 20:03:05 +0000
+Subject: [PATCH] Clients nao hospedados no site baixam da colecao ROBLOX
+ 2007-2013 no archive.org; link na pagina inicial
+
+---
+ RobloxServer.Web/Code/Config.cs           | 418 +++++++++++-----------
+ RobloxServer.Web/Install/Download.ashx.cs |  75 ++--
+ RobloxServer.Web/Landing.aspx             | 333 ++++++++---------
+ RobloxServer.Web/Web.config               | 210 +++++------
+ 4 files changed, 528 insertions(+), 508 deletions(-)
+
+diff --git a/RobloxServer.Web/Code/Config.cs b/RobloxServer.Web/Code/Config.cs
+index c535e85..cac9345 100644
+--- a/RobloxServer.Web/Code/Config.cs
++++ b/RobloxServer.Web/Code/Config.cs
+@@ -1,204 +1,214 @@
+-using System;
+-using System.Collections.Generic;
+-using System.Configuration;
+-using System.Linq;
+-using System.Text.RegularExpressions;
+-using System.Web;
+-using System.Web.Hosting;
+-
+-namespace RobloxServer
+-{
+-    /// <summary>
+-    /// Typed access to the &lt;appSettings&gt; section of Web.config.
+-    /// Every value has a default so the site boots with an empty appSettings block.
+-    /// </summary>
+-    public static class Config
+-    {
+-        static string Get(string key, string fallback)
+-        {
+-            string value = ConfigurationManager.AppSettings[key];
+-            return string.IsNullOrWhiteSpace(value) ? fallback : value.Trim();
+-        }
+-
+-        static int GetInt(string key, int fallback)
+-        {
+-            int value;
+-            return int.TryParse(Get(key, ""), out value) ? value : fallback;
+-        }
+-
+-        static bool GetBool(string key, bool fallback)
+-        {
+-            bool value;
+-            return bool.TryParse(Get(key, ""), out value) ? value : fallback;
+-        }
+-
+-        static string[] GetList(string key)
+-        {
+-            return Get(key, "")
+-                .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+-                .Select(s => s.Trim())
+-                .Where(s => s.Length > 0)
+-                .ToArray();
+-        }
+-
+-        public static string SiteName { get { return Get("SiteName", "ROBLOX"); } }
+-
+-        /// <summary>
+-        /// The URL clients use, with a trailing slash. Empty (the default) means "the address this
+-        /// request came in on", so the site works as http://192.168.1.2/, http://robloxserver.lan/
+-        /// or a DDNS name without configuration. Set it to pin one address in every script.
+-        /// </summary>
+-        public static string BaseUrl
+-        {
+-            get
+-            {
+-                string url = Get("BaseUrl", "");
+-                if (url.Length == 0)
+-                {
+-                    url = RequestBaseUrl();
+-                }
+-                return url.EndsWith("/") ? url : url + "/";
+-            }
+-        }
+-
+-        /// <summary>Base for the api.roblox.com style endpoints. Defaults to BaseUrl.</summary>
+-        public static string ApiUrl
+-        {
+-            get
+-            {
+-                string url = Get("ApiUrl", "");
+-                if (url.Length == 0)
+-                {
+-                    return BaseUrl;
+-                }
+-                return url.EndsWith("/") ? url : url + "/";
+-            }
+-        }
+-
+-        static string RequestBaseUrl()
+-        {
+-            HttpContext context = HttpContext.Current;
+-            if (context == null)
+-            {
+-                return "http://localhost/";
+-            }
+-
+-            HttpRequest request;
+-            try
+-            {
+-                request = context.Request;
+-            }
+-            catch (HttpException)
+-            {
+-                // Application_Start has no request.
+-                return "http://localhost/";
+-            }
+-
+-            string host = request.Headers["Host"];
+-            if (string.IsNullOrEmpty(host) || !Regex.IsMatch(host, @"^[A-Za-z0-9.\-]+(:[0-9]{1,5})?$|^\[[0-9A-Fa-f:.]+\](:[0-9]{1,5})?$"))
+-            {
+-                host = request.Url.Authority;
+-            }
+-
+-            string scheme = request.Url.Scheme;
+-            string forwardedProto = request.Headers["X-Forwarded-Proto"];
+-            if ((forwardedProto == "https" || forwardedProto == "http") && TrustedProxies.Contains(request.UserHostAddress ?? ""))
+-            {
+-                scheme = forwardedProto;
+-            }
+-
+-            return scheme + "://" + host + "/";
+-        }
+-
+-        /// <summary>RCC-style shared secret passed as ?apiKey= by game servers (2015 behaviour).</summary>
+-        public static string ApiKey { get { return Get("ApiKey", ""); } }
+-
+-        public static bool RegistrationOpen { get { return GetBool("RegistrationOpen", true); } }
+-
+-        /// <summary>User names that are site administrators ("Roblox" staff).</summary>
+-        public static string[] Administrators { get { return GetList("Administrators"); } }
+-
+-        /// <summary>Who may host a game server: Anyone, Owner or Admin.</summary>
+-        public static string HostPolicy { get { return Get("HostPolicy", "Anyone"); } }
+-
+-        /// <summary>When true a game server must receive a valid authentication ticket from every player.</summary>
+-        public static bool RequireAuthTickets { get { return GetBool("RequireAuthTickets", true); } }
+-
+-        public static int AuthTicketMinutes { get { return GetInt("AuthTicketMinutes", 5); } }
+-
+-        public static string[] AllowedSecurityVersions { get { return GetList("AllowedSecurityVersions"); } }
+-
+-        public static string[] AllowedMD5Hashes { get { return GetList("AllowedMD5Hashes"); } }
+-
+-        public static int RateLimitRequests { get { return GetInt("RateLimitRequests", 45); } }
+-
+-        public static int RateLimitWindowSeconds { get { return GetInt("RateLimitWindowSeconds", 30); } }
+-
+-        public static int LoginFloodAttempts { get { return GetInt("LoginFloodAttempts", 5); } }
+-
+-        public static int LoginFloodMinutes { get { return GetInt("LoginFloodMinutes", 5); } }
+-
+-        /// <summary>Reverse proxies (the Raspberry Pi) whose X-Forwarded-For header is trusted.</summary>
+-        public static string[] TrustedProxies
+-        {
+-            get
+-            {
+-                var list = new List<string>(GetList("TrustedProxies"));
+-                list.Add("127.0.0.1");
+-                list.Add("::1");
+-                return list.ToArray();
+-            }
+-        }
+-
+-        /// <summary>
+-        /// Public IP or DNS name of the network (the Pi's WAN address). Game servers hosted on the
+-        /// LAN are shown with this address to players outside the LAN.
+-        /// </summary>
+-        public static string PublicGameAddress { get { return Get("PublicGameAddress", ""); } }
+-
+-        public static int MaxPlaceSizeMegabytes { get { return GetInt("MaxPlaceSizeMegabytes", 50); } }
+-
+-        /// <summary>Asset ids handed out to places uploaded here. Starts high to avoid colliding with real Roblox assets.</summary>
+-        public static long FirstLocalAssetId { get { return GetInt("FirstLocalAssetId", 1900000000); } }
+-
+-        /// <summary>None or Roblox. Roblox resolves unknown asset ids through assetdelivery.roblox.com like the old Node server.</summary>
+-        public static string AssetFallback { get { return Get("AssetFallback", "Roblox"); } }
+-
+-        /// <summary>The only clients RobloxPlayerLauncher knows how to install and start.</summary>
+-        public static readonly string[] SupportedClients = { "2012M", "2013M" };
+-
+-        /// <summary>Clients games can be published for: the "Clients" setting, limited to SupportedClients.</summary>
+-        public static string[] Clients
+-        {
+-            get
+-            {
+-                string[] clients = GetList("Clients")
+-                    .Select(c => SupportedClients.FirstOrDefault(s => string.Equals(s, c, StringComparison.OrdinalIgnoreCase)))
+-                    .Where(c => c != null)
+-                    .Distinct()
+-                    .ToArray();
+-                return clients.Length > 0 ? clients : SupportedClients.ToArray();
+-            }
+-        }
+-
+-        public static string DefaultClient
+-        {
+-            get
+-            {
+-                string client = Get("DefaultClient", "2012M");
+-                return Clients.FirstOrDefault(c => string.Equals(c, client, StringComparison.OrdinalIgnoreCase)) ?? Clients[0];
+-            }
+-        }
+-
+-        /// <summary>Where "Download ROBLOX" goes when App_Data/Launcher/RobloxPlayerLauncher.exe does not exist.</summary>
+-        public static string LauncherDownloadUrl
+-        {
+-            get { return Get("LauncherDownloadUrl", "https://github.com/V0rtexLinux/RobloxServerLauncher/releases/latest"); }
+-        }
+-
+-        public static string DataPath
+-        {
+-            get { return HostingEnvironment.MapPath("~/App_Data") ?? AppDomain.CurrentDomain.BaseDirectory; }
+-        }
+-    }
+-}
++using System;
++using System.Collections.Generic;
++using System.Configuration;
++using System.Linq;
++using System.Text.RegularExpressions;
++using System.Web;
++using System.Web.Hosting;
++
++namespace RobloxServer
++{
++    /// <summary>
++    /// Typed access to the &lt;appSettings&gt; section of Web.config.
++    /// Every value has a default so the site boots with an empty appSettings block.
++    /// </summary>
++    public static class Config
++    {
++        static string Get(string key, string fallback)
++        {
++            string value = ConfigurationManager.AppSettings[key];
++            return string.IsNullOrWhiteSpace(value) ? fallback : value.Trim();
++        }
++
++        static int GetInt(string key, int fallback)
++        {
++            int value;
++            return int.TryParse(Get(key, ""), out value) ? value : fallback;
++        }
++
++        static bool GetBool(string key, bool fallback)
++        {
++            bool value;
++            return bool.TryParse(Get(key, ""), out value) ? value : fallback;
++        }
++
++        static string[] GetList(string key)
++        {
++            return Get(key, "")
++                .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
++                .Select(s => s.Trim())
++                .Where(s => s.Length > 0)
++                .ToArray();
++        }
++
++        public static string SiteName { get { return Get("SiteName", "ROBLOX"); } }
++
++        /// <summary>
++        /// The URL clients use, with a trailing slash. Empty (the default) means "the address this
++        /// request came in on", so the site works as http://192.168.1.2/, http://robloxserver.lan/
++        /// or a DDNS name without configuration. Set it to pin one address in every script.
++        /// </summary>
++        public static string BaseUrl
++        {
++            get
++            {
++                string url = Get("BaseUrl", "");
++                if (url.Length == 0)
++                {
++                    url = RequestBaseUrl();
++                }
++                return url.EndsWith("/") ? url : url + "/";
++            }
++        }
++
++        /// <summary>Base for the api.roblox.com style endpoints. Defaults to BaseUrl.</summary>
++        public static string ApiUrl
++        {
++            get
++            {
++                string url = Get("ApiUrl", "");
++                if (url.Length == 0)
++                {
++                    return BaseUrl;
++                }
++                return url.EndsWith("/") ? url : url + "/";
++            }
++        }
++
++        static string RequestBaseUrl()
++        {
++            HttpContext context = HttpContext.Current;
++            if (context == null)
++            {
++                return "http://localhost/";
++            }
++
++            HttpRequest request;
++            try
++            {
++                request = context.Request;
++            }
++            catch (HttpException)
++            {
++                // Application_Start has no request.
++                return "http://localhost/";
++            }
++
++            string host = request.Headers["Host"];
++            if (string.IsNullOrEmpty(host) || !Regex.IsMatch(host, @"^[A-Za-z0-9.\-]+(:[0-9]{1,5})?$|^\[[0-9A-Fa-f:.]+\](:[0-9]{1,5})?$"))
++            {
++                host = request.Url.Authority;
++            }
++
++            string scheme = request.Url.Scheme;
++            string forwardedProto = request.Headers["X-Forwarded-Proto"];
++            if ((forwardedProto == "https" || forwardedProto == "http") && TrustedProxies.Contains(request.UserHostAddress ?? ""))
++            {
++                scheme = forwardedProto;
++            }
++
++            return scheme + "://" + host + "/";
++        }
++
++        /// <summary>RCC-style shared secret passed as ?apiKey= by game servers (2015 behaviour).</summary>
++        public static string ApiKey { get { return Get("ApiKey", ""); } }
++
++        public static bool RegistrationOpen { get { return GetBool("RegistrationOpen", true); } }
++
++        /// <summary>User names that are site administrators ("Roblox" staff).</summary>
++        public static string[] Administrators { get { return GetList("Administrators"); } }
++
++        /// <summary>Who may host a game server: Anyone, Owner or Admin.</summary>
++        public static string HostPolicy { get { return Get("HostPolicy", "Anyone"); } }
++
++        /// <summary>When true a game server must receive a valid authentication ticket from every player.</summary>
++        public static bool RequireAuthTickets { get { return GetBool("RequireAuthTickets", true); } }
++
++        public static int AuthTicketMinutes { get { return GetInt("AuthTicketMinutes", 5); } }
++
++        public static string[] AllowedSecurityVersions { get { return GetList("AllowedSecurityVersions"); } }
++
++        public static string[] AllowedMD5Hashes { get { return GetList("AllowedMD5Hashes"); } }
++
++        public static int RateLimitRequests { get { return GetInt("RateLimitRequests", 45); } }
++
++        public static int RateLimitWindowSeconds { get { return GetInt("RateLimitWindowSeconds", 30); } }
++
++        public static int LoginFloodAttempts { get { return GetInt("LoginFloodAttempts", 5); } }
++
++        public static int LoginFloodMinutes { get { return GetInt("LoginFloodMinutes", 5); } }
++
++        /// <summary>Reverse proxies (the Raspberry Pi) whose X-Forwarded-For header is trusted.</summary>
++        public static string[] TrustedProxies
++        {
++            get
++            {
++                var list = new List<string>(GetList("TrustedProxies"));
++                list.Add("127.0.0.1");
++                list.Add("::1");
++                return list.ToArray();
++            }
++        }
++
++        /// <summary>
++        /// Public IP or DNS name of the network (the Pi's WAN address). Game servers hosted on the
++        /// LAN are shown with this address to players outside the LAN.
++        /// </summary>
++        public static string PublicGameAddress { get { return Get("PublicGameAddress", ""); } }
++
++        public static int MaxPlaceSizeMegabytes { get { return GetInt("MaxPlaceSizeMegabytes", 50); } }
++
++        /// <summary>Asset ids handed out to places uploaded here. Starts high to avoid colliding with real Roblox assets.</summary>
++        public static long FirstLocalAssetId { get { return GetInt("FirstLocalAssetId", 1900000000); } }
++
++        /// <summary>None or Roblox. Roblox resolves unknown asset ids through assetdelivery.roblox.com like the old Node server.</summary>
++        public static string AssetFallback { get { return Get("AssetFallback", "Roblox"); } }
++
++        /// <summary>The only clients RobloxPlayerLauncher knows how to install and start.</summary>
++        public static readonly string[] SupportedClients = { "2012M", "2013M" };
++
++        /// <summary>Clients games can be published for: the "Clients" setting, limited to SupportedClients.</summary>
++        public static string[] Clients
++        {
++            get
++            {
++                string[] clients = GetList("Clients")
++                    .Select(c => SupportedClients.FirstOrDefault(s => string.Equals(s, c, StringComparison.OrdinalIgnoreCase)))
++                    .Where(c => c != null)
++                    .Distinct()
++                    .ToArray();
++                return clients.Length > 0 ? clients : SupportedClients.ToArray();
++            }
++        }
++
++        public static string DefaultClient
++        {
++            get
++            {
++                string client = Get("DefaultClient", "2012M");
++                return Clients.FirstOrDefault(c => string.Equals(c, client, StringComparison.OrdinalIgnoreCase)) ?? Clients[0];
++            }
++        }
++
++        /// <summary>Where "Download ROBLOX" goes when App_Data/Launcher/RobloxPlayerLauncher.exe does not exist.</summary>
++        public static string LauncherDownloadUrl
++        {
++            get { return Get("LauncherDownloadUrl", "https://github.com/V0rtexLinux/RobloxServerLauncher/releases/latest"); }
++        }
++
++        /// <summary>Where a client download goes when its zip is not in App_Data/Clients (ROBLOX 2007-2013 collection on archive.org).</summary>
++        public static string ClientsArchiveUrl
++        {
++            get
++            {
++                string url = Get("ClientsArchiveUrl", "");
++                return string.IsNullOrWhiteSpace(url) ? "https://archive.org/download/ROBLOX20072013/ROBLOX%202007-2013.zip" : url.Trim();
++            }
++        }
++
++        public static string DataPath
++        {
++            get { return HostingEnvironment.MapPath("~/App_Data") ?? AppDomain.CurrentDomain.BaseDirectory; }
++        }
++    }
++}
+diff --git a/RobloxServer.Web/Install/Download.ashx.cs b/RobloxServer.Web/Install/Download.ashx.cs
+index b7cb80f..0727739 100644
+--- a/RobloxServer.Web/Install/Download.ashx.cs
++++ b/RobloxServer.Web/Install/Download.ashx.cs
+@@ -1,34 +1,41 @@
+-using RobloxServer.Data;
+-using RobloxServer.Web;
+-
+-namespace RobloxServer.Handlers.Install
+-{
+-    /// <summary>
+-    /// /install/download.ashx?client=2012M|2013M|Launcher: the client zip or the launcher. Without a
+-    /// launcher in App_Data/Launcher the launcher download goes to Config.LauncherDownloadUrl.
+-    /// </summary>
+-    public class Download : HandlerBase
+-    {
+-        protected override void Handle()
+-        {
+-            string name = ClientPackages.CleanName(Request.QueryString["client"]);
+-            ClientPackages.Package package = ClientPackages.Find(name);
+-            if (package == null)
+-            {
+-                if (name == ClientPackages.Launcher)
+-                {
+-                    Response.Redirect(Config.LauncherDownloadUrl, false);
+-                    return;
+-                }
+-                WriteStatus(404, "Not found");
+-                return;
+-            }
+-
+-            Response.ContentType = name == ClientPackages.Launcher ? "application/octet-stream" : "application/zip";
+-            Response.AppendHeader("Content-Disposition", "attachment; filename=\"" + package.FileName + "\"");
+-            Response.AppendHeader("X-Package-Version", package.Version);
+-            Response.AppendHeader("X-Package-Sha256", package.Sha256);
+-            Response.TransmitFile(package.Path);
+-        }
+-    }
+-}
++using RobloxServer.Data;
++using RobloxServer.Web;
++
++namespace RobloxServer.Handlers.Install
++{
++    /// <summary>
++    /// /install/download.ashx?client=2012M|2013M|Launcher: the client zip or the launcher. Without a
++    /// launcher in App_Data/Launcher the launcher download goes to Config.LauncherDownloadUrl; a client
++    /// without a zip in App_Data/Clients goes to Config.ClientsArchiveUrl.
++    /// </summary>
++    public class Download : HandlerBase
++    {
++        protected override void Handle()
++        {
++            string name = ClientPackages.CleanName(Request.QueryString["client"]);
++            ClientPackages.Package package = ClientPackages.Find(name);
++            if (package == null)
++            {
++                if (name == ClientPackages.Launcher)
++                {
++                    Response.Redirect(Config.LauncherDownloadUrl, false);
++                    return;
++                }
++                if (name != null)
++                {
++                    // A client this site does not host itself: send the person to the archive.org collection.
++                    Response.Redirect(Config.ClientsArchiveUrl, false);
++                    return;
++                }
++                WriteStatus(404, "Not found");
++                return;
++            }
++
++            Response.ContentType = name == ClientPackages.Launcher ? "application/octet-stream" : "application/zip";
++            Response.AppendHeader("Content-Disposition", "attachment; filename=\"" + package.FileName + "\"");
++            Response.AppendHeader("X-Package-Version", package.Version);
++            Response.AppendHeader("X-Package-Sha256", package.Sha256);
++            Response.TransmitFile(package.Path);
++        }
++    }
++}
+diff --git a/RobloxServer.Web/Landing.aspx b/RobloxServer.Web/Landing.aspx
+index 6f467b2..8e4ad4a 100644
+--- a/RobloxServer.Web/Landing.aspx
++++ b/RobloxServer.Web/Landing.aspx
+@@ -1,166 +1,167 @@
+-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Landing.aspx.cs" Inherits="RobloxServer.Pages.Landing" %>
+-<!DOCTYPE html>
+-<html>
+-<head runat="server">
+-    <meta charset="utf-8" />
+-    <title><%: RobloxServer.Config.SiteName %> - Join millions of builders</title>
+-    <link rel="icon" type="image/vnd.microsoft.icon" href="<%: ResolveUrl("~/favicon.ico") %>" />
+-    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" runat="server" />
+-    <link href="~/Content/Pages/Landing.css" rel="stylesheet" type="text/css" runat="server" />
+-</head>
+-<body>
+-    <form id="LandingForm" runat="server">
+-        <div id="Container">
+-            <div id="Experimental" data-is-animated="True">
+-                <div class="Content">
+-                    <div id="animatedHeader">
+-                        <div id="headerLogo"><img src="<%: ResolveUrl("~/Images/Landing/logo.png") %>" alt="<%: RobloxServer.Config.SiteName %>" /></div>
+-                        <div id="headerTextTop">Join millions of builders</div>
+-                        <div id="headerTextBottom">and explore their creations</div>
+-                    </div>
+-                    <div id="animatedBodyWrapper">
+-                        <div id="animatedBody">
+-                            <div class="VideoContainer">
+-                                <a href="<%: ResolveUrl("~/Games") %>"><img src="<%: ResolveUrl("~/Images/Thumbs/Place1_420x230.jpg") %>" width="380" height="250" alt="Games" /></a>
+-                                <div class="slogan-container">
+-                                    <div id="slogan">What will you build?</div>
+-                                </div>
+-                            </div>
+-                            <div id="animated-wrapper" data-tab="<%: SelectedTab %>">
+-                                <div class="sign-up-row">
+-                                    <div class="sign-up-inner-row">
+-                                        <span id="animated-tab-signup" class="animated-tab">Sign up</span>
+-                                        <span class="animated-tab">|</span>
+-                                        <span id="animated-tab-login" class="animated-tab">Login</span>
+-                                    </div>
+-                                </div>
+-
+-                                <div id="animated-login" style="display: none;">
+-                                    <asp:Panel ID="LoginPanel" runat="server" DefaultButton="LoginButton">
+-                                        <div class="sign-up-row">
+-                                            <div class="sign-up-inner-row">
+-                                                <span id="login-error" class="required-text error" <%= LoginError == null ? "style=\"display: none;\"" : "" %>><%: LoginError %></span>
+-                                            </div>
+-                                        </div>
+-                                        <div class="sign-up-row">
+-                                            <asp:TextBox ID="loginUsername" runat="server" MaxLength="20" CssClass="text-box text-box-large" TabIndex="1" placeholder="Username" />
+-                                        </div>
+-                                        <div class="sign-up-row">
+-                                            <asp:TextBox ID="loginPassword" runat="server" TextMode="Password" MaxLength="200" CssClass="text-box text-box-large" TabIndex="2" placeholder="Password" />
+-                                        </div>
+-                                        <div>
+-                                            <asp:Button ID="LoginButton" runat="server" Text="Login" CssClass="btn-large btn-primary" TabIndex="3" OnClick="LoginButton_Click" UseSubmitBehavior="true" />
+-                                        </div>
+-                                    </asp:Panel>
+-                                    <br />
+-                                    <div id="login-footer" class="sign-up-row">
+-                                        <div>Don't have an account? <a href="#" id="show-signup">Sign up</a></div>
+-                                    </div>
+-                                </div>
+-
+-                                <div id="animated-signup" style="display: none;">
+-                                    <asp:Panel ID="SignupPanel" runat="server" DefaultButton="SignUpButton">
+-                                        <div class="sign-up-row">
+-                                            <span id="signup-error" class="error" <%= SignupError == null ? "style=\"display: none;\"" : "" %>><%: SignupError %></span>
+-                                        </div>
+-                                        <div class="sign-up-row">
+-                                            <div class="sign-up-inner-row">
+-                                                <span id="birthdayGood" class="good-text" style="display: none;">OK</span>
+-                                                <span id="birthdayError" class="required-text error" style="display: none;"></span>
+-                                                <span id="birthdayText">Birthday</span>
+-                                            </div>
+-                                            <div>
+-                                                <asp:DropDownList ID="lstMonths" runat="server" TabIndex="1" />
+-                                                <asp:DropDownList ID="lstDays" runat="server" TabIndex="2" />
+-                                                <asp:DropDownList ID="lstYears" runat="server" TabIndex="3" />
+-                                            </div>
+-                                            <div>
+-                                                <span class="sign-up-description">Enter your birthday for a personalized experience.<br />
+-                                                    It will not be given to any third party.</span>
+-                                            </div>
+-                                        </div>
+-                                        <div class="sign-up-row">
+-                                            <div class="sign-up-inner-row">
+-                                                <span id="genderGood" class="good-text" style="display: none;">OK</span>
+-                                                <span id="genderError" class="required-text error" style="display: none;"></span>
+-                                                <span id="genderText">Gender</span>
+-                                            </div>
+-                                            <div>
+-                                                <input type="radio" id="MaleBtn" name="gender" value="Male" tabindex="4" <%= SelectedGender == "Male" ? "checked=\"checked\"" : "" %> /><label for="MaleBtn">Male</label>
+-                                                <input type="radio" id="FemaleBtn" name="gender" value="Female" tabindex="5" <%= SelectedGender == "Female" ? "checked=\"checked\"" : "" %> /><label for="FemaleBtn">Female</label>
+-                                            </div>
+-                                        </div>
+-                                        <div class="sign-up-row">
+-                                            <div class="sign-up-inner-row">
+-                                                <span id="robloxConsentText">This is my real Roblox username</span>
+-                                            </div>
+-                                            <p class="sign-up-help-text" style="font-size: 11px; color: #666; margin: 4px 0;">
+-                                                If you say Yes, we'll look up this username on Roblox's public website
+-                                                (roblox.com) just to confirm it exists and copy your public avatar
+-                                                picture to show on your profile here. We don't get your password,
+-                                                e-mail, or anything private — Roblox never shares that with us, and
+-                                                we only do this once, right now, for the account you're creating.
+-                                                If you say No (or this isn't really your Roblox username), we skip
+-                                                this step entirely and nothing is looked up.
+-                                            </p>
+-                                            <div>
+-                                                <input type="radio" id="RobloxConsentYes" name="robloxConsent" value="yes" tabindex="6" <%= RobloxConsent == "yes" ? "checked=\"checked\"" : "" %> /><label for="RobloxConsentYes">Yes, link my public avatar</label>
+-                                                <input type="radio" id="RobloxConsentNo" name="robloxConsent" value="no" tabindex="7" <%= RobloxConsent != "yes" ? "checked=\"checked\"" : "" %> /><label for="RobloxConsentNo">No</label>
+-                                            </div>
+-                                        </div>
+-                                        <div class="sign-up-row">
+-                                            <div class="sign-up-inner-row">
+-                                                <span id="usernameGood" class="good-text" style="display: none;">OK</span>
+-                                                <span id="usernameError" class="required-text error" style="display: none;"></span>
+-                                                <span id="usernameText">Username</span>
+-                                            </div>
+-                                            <div><asp:TextBox ID="username" runat="server" MaxLength="20" CssClass="text-box text-box-large" TabIndex="6" /></div>
+-                                            <div><span class="sign-up-description">3-20 alphanumeric characters, no spaces</span></div>
+-                                        </div>
+-                                        <div class="sign-up-row">
+-                                            <div class="sign-up-inner-row">
+-                                                <span id="passwordGood" class="good-text" style="display: none;">OK</span>
+-                                                <span id="passwordError" class="required-text error" style="display: none;"></span>
+-                                                <span id="passwordText">Password</span>
+-                                            </div>
+-                                            <div><asp:TextBox ID="password" runat="server" TextMode="Password" MaxLength="200" CssClass="text-box text-box-large" TabIndex="7" /></div>
+-                                            <div><span class="sign-up-description">At least 6 characters, not your username</span></div>
+-                                        </div>
+-                                        <div class="sign-up-row">
+-                                            <div class="sign-up-inner-row">
+-                                                <span id="passwordConfirmGood" class="good-text" style="display: none;">OK</span>
+-                                                <span id="passwordConfirmError" class="required-text error" style="display: none;"></span>
+-                                                <span id="passwordConfirmText">Confirm Password</span>
+-                                            </div>
+-                                            <div><asp:TextBox ID="passwordConfirm" runat="server" TextMode="Password" MaxLength="200" CssClass="text-box text-box-large" TabIndex="8" /></div>
+-                                        </div>
+-                                        <div>
+-                                            <asp:Button ID="SignUpButton" runat="server" Text="Sign Up" CssClass="btn-large btn-primary roblox-signup" TabIndex="9" OnClick="SignUpButton_Click" />
+-                                        </div>
+-                                    </asp:Panel>
+-                                </div>
+-                            </div>
+-                        </div>
+-                    </div>
+-                </div>
+-            </div>
+-
+-            <div class="Footer Experimental">
+-                <div class="FooterContent">
+-                    <p class="FooterParagraph">
+-                        <a href="<%: ResolveUrl("~/Games") %>">Games</a> &nbsp;|&nbsp; <a href="<%: ResolveUrl("~/Browse.aspx") %>">People</a> &nbsp;|&nbsp;
+-                        <a href="<%: ResolveUrl("~/Install/Download.ashx?client=Launcher") %>">Download</a> &nbsp;|&nbsp; <a href="https://github.com/V0rtexLinux/RobloxServer">Source Code</a>
+-                    </p>
+-                    <div class="FooterLegaleseContainer">
+-                        <p class="Legalese">
+-                            <%: RobloxServer.Config.SiteName %> is a fan-made private server. ROBLOX, "Online Building Toy", characters, logos, names, and all related indicia are trademarks of ROBLOX Corporation.
+-                            This site is not sponsored, authorized or endorsed by ROBLOX Corporation.
+-                        </p>
+-                    </div>
+-                </div>
+-            </div>
+-        </div>
+-    </form>
+-    <script type="text/javascript" src="<%: ResolveUrl("~/Content/Landing.js") %>"></script>
+-</body>
+-</html>
++<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Landing.aspx.cs" Inherits="RobloxServer.Pages.Landing" %>
++<!DOCTYPE html>
++<html>
++<head runat="server">
++    <meta charset="utf-8" />
++    <title><%: RobloxServer.Config.SiteName %> - Join millions of builders</title>
++    <link rel="icon" type="image/vnd.microsoft.icon" href="<%: ResolveUrl("~/favicon.ico") %>" />
++    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" runat="server" />
++    <link href="~/Content/Pages/Landing.css" rel="stylesheet" type="text/css" runat="server" />
++</head>
++<body>
++    <form id="LandingForm" runat="server">
++        <div id="Container">
++            <div id="Experimental" data-is-animated="True">
++                <div class="Content">
++                    <div id="animatedHeader">
++                        <div id="headerLogo"><img src="<%: ResolveUrl("~/Images/Landing/logo.png") %>" alt="<%: RobloxServer.Config.SiteName %>" /></div>
++                        <div id="headerTextTop">Join millions of builders</div>
++                        <div id="headerTextBottom">and explore their creations</div>
++                    </div>
++                    <div id="animatedBodyWrapper">
++                        <div id="animatedBody">
++                            <div class="VideoContainer">
++                                <a href="<%: ResolveUrl("~/Games") %>"><img src="<%: ResolveUrl("~/Images/Thumbs/Place1_420x230.jpg") %>" width="380" height="250" alt="Games" /></a>
++                                <div class="slogan-container">
++                                    <div id="slogan">What will you build?</div>
++                                </div>
++                            </div>
++                            <div id="animated-wrapper" data-tab="<%: SelectedTab %>">
++                                <div class="sign-up-row">
++                                    <div class="sign-up-inner-row">
++                                        <span id="animated-tab-signup" class="animated-tab">Sign up</span>
++                                        <span class="animated-tab">|</span>
++                                        <span id="animated-tab-login" class="animated-tab">Login</span>
++                                    </div>
++                                </div>
++
++                                <div id="animated-login" style="display: none;">
++                                    <asp:Panel ID="LoginPanel" runat="server" DefaultButton="LoginButton">
++                                        <div class="sign-up-row">
++                                            <div class="sign-up-inner-row">
++                                                <span id="login-error" class="required-text error" <%= LoginError == null ? "style=\"display: none;\"" : "" %>><%: LoginError %></span>
++                                            </div>
++                                        </div>
++                                        <div class="sign-up-row">
++                                            <asp:TextBox ID="loginUsername" runat="server" MaxLength="20" CssClass="text-box text-box-large" TabIndex="1" placeholder="Username" />
++                                        </div>
++                                        <div class="sign-up-row">
++                                            <asp:TextBox ID="loginPassword" runat="server" TextMode="Password" MaxLength="200" CssClass="text-box text-box-large" TabIndex="2" placeholder="Password" />
++                                        </div>
++                                        <div>
++                                            <asp:Button ID="LoginButton" runat="server" Text="Login" CssClass="btn-large btn-primary" TabIndex="3" OnClick="LoginButton_Click" UseSubmitBehavior="true" />
++                                        </div>
++                                    </asp:Panel>
++                                    <br />
++                                    <div id="login-footer" class="sign-up-row">
++                                        <div>Don't have an account? <a href="#" id="show-signup">Sign up</a></div>
++                                    </div>
++                                </div>
++
++                                <div id="animated-signup" style="display: none;">
++                                    <asp:Panel ID="SignupPanel" runat="server" DefaultButton="SignUpButton">
++                                        <div class="sign-up-row">
++                                            <span id="signup-error" class="error" <%= SignupError == null ? "style=\"display: none;\"" : "" %>><%: SignupError %></span>
++                                        </div>
++                                        <div class="sign-up-row">
++                                            <div class="sign-up-inner-row">
++                                                <span id="birthdayGood" class="good-text" style="display: none;">OK</span>
++                                                <span id="birthdayError" class="required-text error" style="display: none;"></span>
++                                                <span id="birthdayText">Birthday</span>
++                                            </div>
++                                            <div>
++                                                <asp:DropDownList ID="lstMonths" runat="server" TabIndex="1" />
++                                                <asp:DropDownList ID="lstDays" runat="server" TabIndex="2" />
++                                                <asp:DropDownList ID="lstYears" runat="server" TabIndex="3" />
++                                            </div>
++                                            <div>
++                                                <span class="sign-up-description">Enter your birthday for a personalized experience.<br />
++                                                    It will not be given to any third party.</span>
++                                            </div>
++                                        </div>
++                                        <div class="sign-up-row">
++                                            <div class="sign-up-inner-row">
++                                                <span id="genderGood" class="good-text" style="display: none;">OK</span>
++                                                <span id="genderError" class="required-text error" style="display: none;"></span>
++                                                <span id="genderText">Gender</span>
++                                            </div>
++                                            <div>
++                                                <input type="radio" id="MaleBtn" name="gender" value="Male" tabindex="4" <%= SelectedGender == "Male" ? "checked=\"checked\"" : "" %> /><label for="MaleBtn">Male</label>
++                                                <input type="radio" id="FemaleBtn" name="gender" value="Female" tabindex="5" <%= SelectedGender == "Female" ? "checked=\"checked\"" : "" %> /><label for="FemaleBtn">Female</label>
++                                            </div>
++                                        </div>
++                                        <div class="sign-up-row">
++                                            <div class="sign-up-inner-row">
++                                                <span id="robloxConsentText">This is my real Roblox username</span>
++                                            </div>
++                                            <p class="sign-up-help-text" style="font-size: 11px; color: #666; margin: 4px 0;">
++                                                If you say Yes, we'll look up this username on Roblox's public website
++                                                (roblox.com) just to confirm it exists and copy your public avatar
++                                                picture to show on your profile here. We don't get your password,
++                                                e-mail, or anything private — Roblox never shares that with us, and
++                                                we only do this once, right now, for the account you're creating.
++                                                If you say No (or this isn't really your Roblox username), we skip
++                                                this step entirely and nothing is looked up.
++                                            </p>
++                                            <div>
++                                                <input type="radio" id="RobloxConsentYes" name="robloxConsent" value="yes" tabindex="6" <%= RobloxConsent == "yes" ? "checked=\"checked\"" : "" %> /><label for="RobloxConsentYes">Yes, link my public avatar</label>
++                                                <input type="radio" id="RobloxConsentNo" name="robloxConsent" value="no" tabindex="7" <%= RobloxConsent != "yes" ? "checked=\"checked\"" : "" %> /><label for="RobloxConsentNo">No</label>
++                                            </div>
++                                        </div>
++                                        <div class="sign-up-row">
++                                            <div class="sign-up-inner-row">
++                                                <span id="usernameGood" class="good-text" style="display: none;">OK</span>
++                                                <span id="usernameError" class="required-text error" style="display: none;"></span>
++                                                <span id="usernameText">Username</span>
++                                            </div>
++                                            <div><asp:TextBox ID="username" runat="server" MaxLength="20" CssClass="text-box text-box-large" TabIndex="6" /></div>
++                                            <div><span class="sign-up-description">3-20 alphanumeric characters, no spaces</span></div>
++                                        </div>
++                                        <div class="sign-up-row">
++                                            <div class="sign-up-inner-row">
++                                                <span id="passwordGood" class="good-text" style="display: none;">OK</span>
++                                                <span id="passwordError" class="required-text error" style="display: none;"></span>
++                                                <span id="passwordText">Password</span>
++                                            </div>
++                                            <div><asp:TextBox ID="password" runat="server" TextMode="Password" MaxLength="200" CssClass="text-box text-box-large" TabIndex="7" /></div>
++                                            <div><span class="sign-up-description">At least 6 characters, not your username</span></div>
++                                        </div>
++                                        <div class="sign-up-row">
++                                            <div class="sign-up-inner-row">
++                                                <span id="passwordConfirmGood" class="good-text" style="display: none;">OK</span>
++                                                <span id="passwordConfirmError" class="required-text error" style="display: none;"></span>
++                                                <span id="passwordConfirmText">Confirm Password</span>
++                                            </div>
++                                            <div><asp:TextBox ID="passwordConfirm" runat="server" TextMode="Password" MaxLength="200" CssClass="text-box text-box-large" TabIndex="8" /></div>
++                                        </div>
++                                        <div>
++                                            <asp:Button ID="SignUpButton" runat="server" Text="Sign Up" CssClass="btn-large btn-primary roblox-signup" TabIndex="9" OnClick="SignUpButton_Click" />
++                                        </div>
++                                    </asp:Panel>
++                                </div>
++                            </div>
++                        </div>
++                    </div>
++                </div>
++            </div>
++
++            <div class="Footer Experimental">
++                <div class="FooterContent">
++                    <p class="FooterParagraph">
++                        <a href="<%: ResolveUrl("~/Games") %>">Games</a> &nbsp;|&nbsp; <a href="<%: ResolveUrl("~/Browse.aspx") %>">People</a> &nbsp;|&nbsp;
++                        <a href="<%: ResolveUrl("~/Install/Download.ashx?client=Launcher") %>">Download</a> &nbsp;|&nbsp;
++                        <a href="<%: RobloxServer.Config.ClientsArchiveUrl %>" target="_blank" rel="noopener">Clients 2007-2013</a> &nbsp;|&nbsp; <a href="https://github.com/V0rtexLinux/RobloxServer">Source Code</a>
++                    </p>
++                    <div class="FooterLegaleseContainer">
++                        <p class="Legalese">
++                            <%: RobloxServer.Config.SiteName %> is a fan-made private server. ROBLOX, "Online Building Toy", characters, logos, names, and all related indicia are trademarks of ROBLOX Corporation.
++                            This site is not sponsored, authorized or endorsed by ROBLOX Corporation.
++                        </p>
++                    </div>
++                </div>
++            </div>
++        </div>
++    </form>
++    <script type="text/javascript" src="<%: ResolveUrl("~/Content/Landing.js") %>"></script>
++</body>
++</html>
+diff --git a/RobloxServer.Web/Web.config b/RobloxServer.Web/Web.config
+index 6a6de06..9b04fd8 100644
+--- a/RobloxServer.Web/Web.config
++++ b/RobloxServer.Web/Web.config
+@@ -1,104 +1,106 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<!--
+-  RobloxServer - ASP.NET 4.6 Web Forms (Visual Studio 2015 era).
+-  Runs on IIS 8.5+/IIS Express (Windows) or Mono xsp4 (Raspberry Pi / Linux).
+-  Every appSetting is optional; see Code/Config.cs for the defaults.
+--->
+-<configuration>
+-  <appSettings>
+-    <add key="SiteName" value="ROBLOX" />
+-    <!-- URL the clients use. Empty = the address each request came in on (IP, http://robloxserver.lan/ from the
+-         Raspberry Pi DNS, or your DDNS name). Set it (e.g. http://robloxserver.lan/) to use one fixed address. -->
+-    <add key="BaseUrl" value="" />
+-    <!-- Base for api.roblox.com style endpoints. Empty = same as BaseUrl. -->
+-    <add key="ApiUrl" value="" />
+-    <!-- RCC style apiKey (GUID) required by /GetAllowedMD5Hashes/ and /GetAllowedSecurityVersions/. Empty = open. -->
+-    <add key="ApiKey" value="" />
+-    <add key="RegistrationOpen" value="true" />
+-    <!-- Comma separated admin user names. The first account ever registered is also an admin. -->
+-    <add key="Administrators" value="" />
+-    <!-- Anyone | Owner | Admin -->
+-    <add key="HostPolicy" value="Anyone" />
+-    <add key="RequireAuthTickets" value="true" />
+-    <add key="AuthTicketMinutes" value="5" />
+-    <!-- 2015 client verification lists, comma separated. -->
+-    <add key="AllowedSecurityVersions" value="0.235.0pcplayer" />
+-    <add key="AllowedMD5Hashes" value="" />
+-    <!-- Same limit the old express-rate-limit used: 45 requests every 30 seconds per IP. -->
+-    <add key="RateLimitRequests" value="45" />
+-    <add key="RateLimitWindowSeconds" value="30" />
+-    <add key="LoginFloodAttempts" value="5" />
+-    <add key="LoginFloodMinutes" value="5" />
+-    <!-- IP of the Raspberry Pi reverse proxy, so X-Forwarded-For is trusted. -->
+-    <add key="TrustedProxies" value="" />
+-    <!-- Public IP / DDNS name of the Raspberry Pi. Shown instead of LAN addresses to players outside the LAN. -->
+-    <add key="PublicGameAddress" value="" />
+-    <add key="MaxPlaceSizeMegabytes" value="50" />
+-    <add key="FirstLocalAssetId" value="1900000000" />
+-    <!-- Roblox | None: what /asset/?id= does with ids that are not stored here. -->
+-    <add key="AssetFallback" value="Roblox" />
+-    <!-- Only 2012M and 2013M are supported by RobloxPlayerLauncher; other names are ignored. -->
+-    <add key="Clients" value="2012M,2013M" />
+-    <add key="DefaultClient" value="2012M" />
+-    <!-- Where "Download ROBLOX" goes when App_Data/Launcher/RobloxPlayerLauncher.exe does not exist (empty: GitHub releases). -->
+-    <add key="LauncherDownloadUrl" value="" />
+-  </appSettings>
+-
+-  <system.web>
+-    <!-- CHAVES CORRIGIDAS: Tamanho exato de 128 caracteres para validação e 64 para criptografia -->
+-    <machineKey validationKey="6864B9FB5E5431840F3E7B9CCCEAD4BFCC51D62D07EC3B5D4FB4876D561037EFAF976D5935C7C90118D547B0FF0DF4D892E6583F7EFFFDC65D4C85A9EFED0714"
+-            decryptionKey="CC8441E3DF5B9834C841FB829C22CE6AF74C7D4C943ABFA9772E1FEB02DC4CF4"
+-            validation="HMACSHA256"
+-            decryption="AES" />
+-
+-    <compilation debug="false" targetFramework="4.6" />
+-    <httpRuntime targetFramework="4.6" maxRequestLength="102400" enableVersionHeader="true" />
+-    
+-    <authentication mode="Forms">
+-      <!-- Removido requireSSL/domain engessados para evitar rejeição do cookie pelo proxy da Vercel -->
+-      <forms name=".ROBLOSECURITY" loginUrl="~/Login.aspx" defaultUrl="~/Default.aspx" timeout="43200"
+-             slidingExpiration="true" cookieless="UseCookies" protection="All" path="/" />
+-    </authentication>
+-    <httpCookies httpOnlyCookies="true" />
+-    <sessionState mode="Off" />
+-    <pages controlRenderingCompatibilityVersion="4.0" clientIDMode="AutoID" enableEventValidation="true" validateRequest="true" viewStateEncryptionMode="Auto" />
+-    <customErrors mode="RemoteOnly" redirectMode="ResponseRewrite" defaultRedirect="~/Error.aspx">
+-      <error statusCode="404" redirect="~/NotFound.aspx" />
+-    </customErrors>
+-  </system.web>
+-
+-  <!-- Client zips are big: only the Admin page accepts uploads up to 1 GB. -->
+-  <location path="Admin.aspx">
+-    <system.web>
+-      <httpRuntime targetFramework="4.6" maxRequestLength="1048576" executionTimeout="3600" enableVersionHeader="true" />
+-    </system.web>
+-    <system.webServer>
+-      <security>
+-        <requestFiltering>
+-          <requestLimits maxAllowedContentLength="1073741824" />
+-        </requestFiltering>
+-      </security>
+-    </system.webServer>
+-  </location>
+-
+-  <system.webServer>
+-    <!-- Global.asax must see every request (.php, .txt and extensionless 2015 URLs are rewritten to .ashx). -->
+-    <modules runAllManagedModulesForAllRequests="true" />
+-    <validation validateIntegratedModeConfiguration="false" />
+-    <security>
+-      <requestFiltering>
+-        <requestLimits maxAllowedContentLength="104857600" />
+-        <fileExtensions>
+-          <add fileExtension=".php" allowed="true" />
+-        </fileExtensions>
+-      </requestFiltering>
+-    </security>
+-    <httpErrors existingResponse="PassThrough" />
+-    <defaultDocument>
+-      <files>
+-        <clear />
+-        <add value="Default.aspx" />
+-      </files>
+-    </defaultDocument>
+-  </system.webServer>
+-</configuration>
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++  RobloxServer - ASP.NET 4.6 Web Forms (Visual Studio 2015 era).
++  Runs on IIS 8.5+/IIS Express (Windows) or Mono xsp4 (Raspberry Pi / Linux).
++  Every appSetting is optional; see Code/Config.cs for the defaults.
++-->
++<configuration>
++  <appSettings>
++    <add key="SiteName" value="ROBLOX" />
++    <!-- URL the clients use. Empty = the address each request came in on (IP, http://robloxserver.lan/ from the
++         Raspberry Pi DNS, or your DDNS name). Set it (e.g. http://robloxserver.lan/) to use one fixed address. -->
++    <add key="BaseUrl" value="" />
++    <!-- Base for api.roblox.com style endpoints. Empty = same as BaseUrl. -->
++    <add key="ApiUrl" value="" />
++    <!-- RCC style apiKey (GUID) required by /GetAllowedMD5Hashes/ and /GetAllowedSecurityVersions/. Empty = open. -->
++    <add key="ApiKey" value="" />
++    <add key="RegistrationOpen" value="true" />
++    <!-- Comma separated admin user names. The first account ever registered is also an admin. -->
++    <add key="Administrators" value="" />
++    <!-- Anyone | Owner | Admin -->
++    <add key="HostPolicy" value="Anyone" />
++    <add key="RequireAuthTickets" value="true" />
++    <add key="AuthTicketMinutes" value="5" />
++    <!-- 2015 client verification lists, comma separated. -->
++    <add key="AllowedSecurityVersions" value="0.235.0pcplayer" />
++    <add key="AllowedMD5Hashes" value="" />
++    <!-- Same limit the old express-rate-limit used: 45 requests every 30 seconds per IP. -->
++    <add key="RateLimitRequests" value="45" />
++    <add key="RateLimitWindowSeconds" value="30" />
++    <add key="LoginFloodAttempts" value="5" />
++    <add key="LoginFloodMinutes" value="5" />
++    <!-- IP of the Raspberry Pi reverse proxy, so X-Forwarded-For is trusted. -->
++    <add key="TrustedProxies" value="" />
++    <!-- Public IP / DDNS name of the Raspberry Pi. Shown instead of LAN addresses to players outside the LAN. -->
++    <add key="PublicGameAddress" value="" />
++    <add key="MaxPlaceSizeMegabytes" value="50" />
++    <add key="FirstLocalAssetId" value="1900000000" />
++    <!-- Roblox | None: what /asset/?id= does with ids that are not stored here. -->
++    <add key="AssetFallback" value="Roblox" />
++    <!-- Only 2012M and 2013M are supported by RobloxPlayerLauncher; other names are ignored. -->
++    <add key="Clients" value="2012M,2013M" />
++    <add key="DefaultClient" value="2012M" />
++    <!-- Where "Download ROBLOX" goes when App_Data/Launcher/RobloxPlayerLauncher.exe does not exist (empty: GitHub releases). -->
++    <add key="LauncherDownloadUrl" value="" />
++    <!-- Where /Install/Download.ashx?client=2012M|2013M goes when that zip is not in App_Data/Clients (empty: ROBLOX 2007-2013 on archive.org). -->
++    <add key="ClientsArchiveUrl" value="" />
++  </appSettings>
++
++  <system.web>
++    <!-- CHAVES CORRIGIDAS: Tamanho exato de 128 caracteres para validação e 64 para criptografia -->
++    <machineKey validationKey="6864B9FB5E5431840F3E7B9CCCEAD4BFCC51D62D07EC3B5D4FB4876D561037EFAF976D5935C7C90118D547B0FF0DF4D892E6583F7EFFFDC65D4C85A9EFED0714"
++            decryptionKey="CC8441E3DF5B9834C841FB829C22CE6AF74C7D4C943ABFA9772E1FEB02DC4CF4"
++            validation="HMACSHA256"
++            decryption="AES" />
++
++    <compilation debug="false" targetFramework="4.6" />
++    <httpRuntime targetFramework="4.6" maxRequestLength="102400" enableVersionHeader="true" />
++    
++    <authentication mode="Forms">
++      <!-- Removido requireSSL/domain engessados para evitar rejeição do cookie pelo proxy da Vercel -->
++      <forms name=".ROBLOSECURITY" loginUrl="~/Login.aspx" defaultUrl="~/Default.aspx" timeout="43200"
++             slidingExpiration="true" cookieless="UseCookies" protection="All" path="/" />
++    </authentication>
++    <httpCookies httpOnlyCookies="true" />
++    <sessionState mode="Off" />
++    <pages controlRenderingCompatibilityVersion="4.0" clientIDMode="AutoID" enableEventValidation="true" validateRequest="true" viewStateEncryptionMode="Auto" />
++    <customErrors mode="RemoteOnly" redirectMode="ResponseRewrite" defaultRedirect="~/Error.aspx">
++      <error statusCode="404" redirect="~/NotFound.aspx" />
++    </customErrors>
++  </system.web>
++
++  <!-- Client zips are big: only the Admin page accepts uploads up to 1 GB. -->
++  <location path="Admin.aspx">
++    <system.web>
++      <httpRuntime targetFramework="4.6" maxRequestLength="1048576" executionTimeout="3600" enableVersionHeader="true" />
++    </system.web>
++    <system.webServer>
++      <security>
++        <requestFiltering>
++          <requestLimits maxAllowedContentLength="1073741824" />
++        </requestFiltering>
++      </security>
++    </system.webServer>
++  </location>
++
++  <system.webServer>
++    <!-- Global.asax must see every request (.php, .txt and extensionless 2015 URLs are rewritten to .ashx). -->
++    <modules runAllManagedModulesForAllRequests="true" />
++    <validation validateIntegratedModeConfiguration="false" />
++    <security>
++      <requestFiltering>
++        <requestLimits maxAllowedContentLength="104857600" />
++        <fileExtensions>
++          <add fileExtension=".php" allowed="true" />
++        </fileExtensions>
++      </requestFiltering>
++    </security>
++    <httpErrors existingResponse="PassThrough" />
++    <defaultDocument>
++      <files>
++        <clear />
++        <add value="Default.aspx" />
++      </files>
++    </defaultDocument>
++  </system.webServer>
++</configuration>
+-- 
+2.43.0
+

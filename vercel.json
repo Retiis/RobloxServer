@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "git": {
+    "deploymentEnabled": false
+  },
+  "services": {
+    "roblox-legacy-backend": {
+      "root": ".",
+      "entrypoint": "Dockerfile.vercel",
+      "runtime": "container"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "roblox-legacy-backend"
+      }
+    }
+  ]
+}

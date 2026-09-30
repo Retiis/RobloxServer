@@ -1,0 +1,37 @@
+/* 2013 build page (Build/BuildPage.css from the RobloxLabs 2013 website, MIT license). */
+.BuildPageHeaderTopLvl { margin: 10px 10px 7px; display: block; }
+#build-page { border-spacing: 0; border-collapse: collapse; margin: 0 10px; }
+#build-page td { padding: 0; }
+#build-page td.menu-area { width: 148px; vertical-align: top; padding-top: 10px; }
+#build-page td.menu-area a.tab-item { display: block; padding: 5px 10px; color: black !important; font-size: 16px; }
+#build-page td.menu-area a.tab-item:hover { text-decoration: none; background-color: #EFEFEF; }
+#build-page td.menu-area a.tab-item-selected { border: 1px solid #CCCCCC; border-right: none; background-color: #EFEFEF; padding: 4px 9px; font-weight: bold; }
+#build-page td.content-area { width: 782px; padding: 9px 10px 10px 10px !important; vertical-align: top; border-left: 1px solid #ccc; }
+#build-page .separator { background-color: #EFEFEF; margin: 10px 0; height: 1px; }
+#build-page table.section-header { margin-bottom: 16px; width: 100%; border-spacing: 0; }
+#build-page table.section-header td { vertical-align: top; height: 45px; }
+#build-page table.section-header h2 { margin: 0; }
+#build-page td.content-title { white-space: nowrap; }
+#build-page td.create-new { text-align: right; }
+#build-page .item-table { border-spacing: 0; border-collapse: collapse; }
+#build-page .item-table td { padding: 0; vertical-align: top; }
+#build-page .item-table .image-col { width: 120px; overflow: hidden; }
+#build-page .item-table .name-col { padding-top: 11px; padding-left: 8px; width: 360px; }
+#build-page .item-table .name-col a.title { display: block; margin-bottom: 2px; overflow: hidden; font-size: 14px; font-weight: bold; }
+#build-page .item-table .stats-col-games { width: 180px; vertical-align: middle; }
+#build-page .item-table .menu-col { vertical-align: middle; text-align: right; width: 100px; }
+#build-page a.game-image img { width: 110px; height: 69px; display: block; border: none; }
+#build-page .totals-label { line-height: 17px; font-size: 13px; color: #999; }
+#build-page .item-table .totals-label span { color: black; margin-left: 2px; }
+#build-page .details-table { border-spacing: 0; border-collapse: collapse; }
+#build-page .details-table td { font-size: 13px; }
+#build-page .details-table td.activate-cell { width: 115px; }
+#build-page .details-table td > span { margin-right: 5px; color: #999; }
+#build-page span.place-active, #build-page span.place-inactive { padding-left: 18px; font-size: 13px; background: url(../../Images/BuildPage/ico-game_status3.png) no-repeat; display: block; height: 15px; }
+#build-page span.place-active { color: #006F00; }
+#build-page span.place-inactive { color: #8B8B8B; background-position: 0 -30px; }
+#build-page .gear-button { background: url(../../Images/BuildPage/btn-gear_sprite_27px.png) no-repeat; display: inline-block; width: 40px; height: 27px; border: none; position: relative; margin-right: 10px; }
+#build-page .gear-button:hover { background-position: 0 -27px; }
+#build-page .aside-text { color: #999; font-size: 13px; }
+#build-page #NewPlacePanel { display: none; margin-bottom: 20px; }
+#build-page #NewPlacePanel.Open { display: block; }

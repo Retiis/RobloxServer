@@ -1,0 +1,1 @@
+{"PingReceiver":"{BaseUrl}Game/ClientPresence.ashx?version=old&PlaceID={PlaceId}","PingIntervalInSeconds":120,"UserId":"{UserId}","MainGuiScriptID":37801172,"AssetUrl":"{BaseUrl}Asset/","BaseUrl":"{BaseUrl}","ApiProxyEndPoint":"{ApiEndPoint}"}

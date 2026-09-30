@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EFEACB27-A4BD-4A76-980F-7207436CC649}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RobloxServer</RootNamespace>
+    <AssemblyName>RobloxServer</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <LangVersion>6</LangVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Pages\LICENSE-RobloxLabs.txt" />
+    <Content Include="Content\Pages\Build.css" />
+    <Content Include="Images\BuildPage\btn-gear_sprite_27px.png" />
+    <Content Include="Images\BuildPage\ico-game_status3.png" />
+    <Content Include="My\Home.aspx" />
+    <Content Include="My\Character.aspx" />
+    <Content Include="Content\Pages\Home.css" />
+    <Content Include="Content\Pages\Character.css" />
+    <Content Include="Images\Icons\BulletPointArrow.png" />
+    <Content Include="Content\Pages\Login.css" />
+    <Content Include="Landing.aspx" />
+    <Content Include="Content\Landing.js" />
+    <Content Include="Content\Pages\Landing.css" />
+    <Content Include="Images\Landing\background_city.jpg" />
+    <Content Include="Images\Landing\forground_city.png" />
+    <Content Include="Images\Landing\logo.png" />
+    <Content Include="Images\Landing\bluepixel.png" />
+    <Content Include="Admin.aspx" />
+    <Content Include="Analytics\Counters.ashx" />
+    <Content Include="Api\Games.ashx" />
+    <Content Include="Api\Login.ashx" />
+    <Content Include="Api\Logout.ashx" />
+    <Content Include="Api\Me.ashx" />
+    <Content Include="Api\Servers.ashx" />
+    <Content Include="Api\Status.ashx" />
+    <Content Include="App_Data\FilteredWords.txt" />
+    <Content Include="App_Data\Templates\BodyColors.xml" />
+    <Content Include="App_Data\Templates\GameServer.lua" />
+    <Content Include="App_Data\Templates\Join.lua" />
+    <Content Include="App_Data\Templates\Studio.json" />
+    <Content Include="App_Data\Templates\Visit.lua" />
+    <Content Include="Asset\BodyColors.ashx" />
+    <Content Include="Asset\Avatar.ashx" />
+    <Content Include="Browse.aspx" />
+    <Content Include="User.aspx" />
+    <Content Include="Void.aspx" />
+    <Content Include="Asset\CharacterFetch.ashx" />
+    <Content Include="Asset\Default.ashx" />
+    <Content Include="Content\PlaceLauncher.js" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Data\Upload.ashx" />
+    <Content Include="Default.aspx" />
+    <Content Include="Develop.aspx" />
+    <Content Include="Error.aspx" />
+    <Content Include="Error\Lua.ashx" />
+    <Content Include="Game\BuildActionPermissionCheck.ashx" />
+    <Content Include="Game\ClientPresence.ashx" />
+    <Content Include="Game\GamePass\GamePassHandler.ashx" />
+    <Content Include="Game\GetAuthTicket.ashx" />
+    <Content Include="Game\GetCurrentUser.ashx" />
+    <Content Include="Game\Join.ashx" />
+    <Content Include="Game\Knockouts.ashx" />
+    <Content Include="Game\Logout.ashx" />
+    <Content Include="Game\LuaWebService\HandleSocialRequest.ashx" />
+    <Content Include="Game\PlaceLauncher.ashx" />
+    <Content Include="Game\Servers.ashx" />
+    <Content Include="Game\Studio.ashx" />
+    <Content Include="Game\ValidateTicket.ashx" />
+    <Content Include="Game\Visit.ashx" />
+    <Content Include="Game\GameServer.ashx" />
+    <Content Include="Install\Download.ashx" />
+    <Content Include="Install\Version.ashx" />
+    <Content Include="Game\Wipeouts.ashx" />
+    <Content Include="Global.asax" />
+    <Content Include="favicon.ico" />
+    <Content Include="Images\Buttons\bg-btn-blue.png" />
+    <Content Include="Images\Buttons\bg-btn-gray.png" />
+    <Content Include="Images\Buttons\bg-btn-green.png" />
+    <Content Include="Images\Buttons\bg-drop_down_arrow.png" />
+    <Content Include="Images\Buttons\bg-lg-green-play.png" />
+    <Content Include="Images\Buttons\btn-control-large-tile.png" />
+    <Content Include="Images\Buttons\btn-control-medium-tile.png" />
+    <Content Include="Images\Buttons\btn-control-small-tile.png" />
+    <Content Include="Images\GenreIcons\Adventure.png" />
+    <Content Include="Images\GenreIcons\Castle.png" />
+    <Content Include="Images\GenreIcons\City.png" />
+    <Content Include="Images\GenreIcons\Classic.png" />
+    <Content Include="Images\GenreIcons\Cthulu.png" />
+    <Content Include="Images\GenreIcons\FPS.png" />
+    <Content Include="Images\GenreIcons\LOL.png" />
+    <Content Include="Images\GenreIcons\ModernMilitary.png" />
+    <Content Include="Images\GenreIcons\Ninja.png" />
+    <Content Include="Images\GenreIcons\Pirate.png" />
+    <Content Include="Images\GenreIcons\RPG.png" />
+    <Content Include="Images\GenreIcons\SciFi.png" />
+    <Content Include="Images\GenreIcons\Sports.png" />
+    <Content Include="Images\GenreIcons\WildWest.png" />
+    <Content Include="Images\Icons\NoSuitcase16x16.png" />
+    <Content Include="Images\Icons\ProgressIndicator3.gif" />
+    <Content Include="Images\Icons\Robux.png" />
+    <Content Include="Images\Icons\Tickets.png" />
+    <Content Include="Images\Icons\gamesPage_filterArrow.png" />
+    <Content Include="Images\Icons\offline.png" />
+    <Content Include="Images\Icons\online.png" />
+    <Content Include="Images\Icons\over13.png" />
+    <Content Include="Images\RevisedHeader\bg-alerts-v2.png" />
+    <Content Include="Images\RevisedHeader\bg-icon_sprites.png" />
+    <Content Include="Images\RevisedHeader\bg-main_menu_hover.png" />
+    <Content Include="Images\RevisedHeader\bg-rbx_header.png" />
+    <Content Include="Images\RevisedHeader\bg-sub_menu_hover.png" />
+    <Content Include="Images\RevisedHeader\btn-rbx_logo.png" />
+    <Content Include="Images\Thumbs\Place1_160x100.jpg" />
+    <Content Include="Images\Thumbs\Place1_420x230.jpg" />
+    <Content Include="Images\Thumbs\Place2_160x100.jpg" />
+    <Content Include="Images\Thumbs\Place2_420x230.jpg" />
+    <Content Include="Images\Thumbs\Place3_160x100.jpg" />
+    <Content Include="Images\Thumbs\Place3_420x230.jpg" />
+    <Content Include="Images\Thumbs\Place4_160x100.jpg" />
+    <Content Include="Images\Thumbs\Place4_420x230.jpg" />
+    <Content Include="Images\Thumbs\Place5_160x100.jpg" />
+    <Content Include="Images\Thumbs\Place5_420x230.jpg" />
+    <Content Include="Keys\PublicKey.ashx" />
+    <Content Include="Login.aspx" />
+    <Content Include="Login\Negotiate.ashx" />
+    <Content Include="MasterServer\Delist.ashx" />
+    <Content Include="MasterServer\List.ashx" />
+    <Content Include="MasterServer\ServerList.ashx" />
+    <Content Include="NotApproved.aspx" />
+    <Content Include="NotFound.aspx" />
+    <Content Include="PlaceItem.aspx" />
+    <Content Include="Register.aspx" />
+    <Content Include="Security\AllowedMD5Hashes.ashx" />
+    <Content Include="Security\AllowedSecurityVersions.ashx" />
+    <Content Include="Setting\QuietGet.ashx" />
+    <Content Include="Site.Master" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="My\Home.aspx.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="My\Home.aspx.designer.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="My\Character.aspx.cs">
+      <DependentUpon>Character.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="My\Character.aspx.designer.cs">
+      <DependentUpon>Character.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Code\Security\Accounts.cs" />
+    <Compile Include="Landing.aspx.cs">
+      <DependentUpon>Landing.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Landing.aspx.designer.cs">
+      <DependentUpon>Landing.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin.aspx.cs">
+      <DependentUpon>Admin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin.aspx.designer.cs">
+      <DependentUpon>Admin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Analytics\Counters.ashx.cs">
+      <DependentUpon>Counters.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Api\Games.ashx.cs">
+      <DependentUpon>Games.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Api\Login.ashx.cs">
+      <DependentUpon>Login.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Api\Logout.ashx.cs">
+      <DependentUpon>Logout.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Api\Me.ashx.cs">
+      <DependentUpon>Me.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Api\Servers.ashx.cs">
+      <DependentUpon>Servers.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Api\Status.ashx.cs">
+      <DependentUpon>Status.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Asset\BodyColors.ashx.cs">
+      <DependentUpon>BodyColors.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Asset\Avatar.ashx.cs">
+      <DependentUpon>Avatar.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Browse.aspx.cs">
+      <DependentUpon>Browse.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Browse.aspx.designer.cs">
+      <DependentUpon>Browse.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="User.aspx.cs">
+      <DependentUpon>User.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="User.aspx.designer.cs">
+      <DependentUpon>User.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Void.aspx.cs">
+      <DependentUpon>Void.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Void.aspx.designer.cs">
+      <DependentUpon>Void.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Code\Data\Noli.cs" />
+    <Compile Include="Asset\CharacterFetch.ashx.cs">
+      <DependentUpon>CharacterFetch.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Asset\Default.ashx.cs">
+      <DependentUpon>Default.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Code\Config.cs" />
+    <Compile Include="Code\Data\Db.cs" />
+    <Compile Include="Code\Data\ClientPackages.cs" />
+    <Compile Include="Game\GameServer.ashx.cs">
+      <DependentUpon>GameServer.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Install\Download.ashx.cs">
+      <DependentUpon>Download.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Install\Version.ashx.cs">
+      <DependentUpon>Version.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Code\Data\Genres.cs" />
+    <Compile Include="Code\Data\Models.cs" />
+    <Compile Include="Code\Data\PlaceService.cs" />
+    <Compile Include="Code\Data\XmlTable.cs" />
+    <Compile Include="Code\Data\RemoteBlobStore.cs" />
+    <Compile Include="Code\Data\RobloxLookup.cs" />
+    <Compile Include="Code\Logging.cs" />
+    <Compile Include="Code\Security\Auth.cs" />
+    <Compile Include="Code\Security\AuthTickets.cs" />
+    <Compile Include="Code\Security\Bans.cs" />
+    <Compile Include="Code\Security\ClientIp.cs" />
+    <Compile Include="Code\Security\FloodChecker.cs" />
+    <Compile Include="Code\Security\PasswordHasher.cs" />
+    <Compile Include="Code\Security\ScriptSigner.cs" />
+    <Compile Include="Code\Security\WordFilter.cs" />
+    <Compile Include="Code\Web\BasePage.cs" />
+    <Compile Include="Code\Web\HandlerBase.cs" />
+    <Compile Include="Code\Web\Routing.cs" />
+    <Compile Include="Code\Web\Scores.cs" />
+    <Compile Include="Code\Web\Templates.cs" />
+    <Compile Include="Data\Upload.ashx.cs">
+      <DependentUpon>Upload.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Develop.aspx.cs">
+      <DependentUpon>Develop.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Develop.aspx.designer.cs">
+      <DependentUpon>Develop.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Error.aspx.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Error\Lua.ashx.cs">
+      <DependentUpon>Lua.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\BuildActionPermissionCheck.ashx.cs">
+      <DependentUpon>BuildActionPermissionCheck.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\ClientPresence.ashx.cs">
+      <DependentUpon>ClientPresence.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\GamePass\GamePassHandler.ashx.cs">
+      <DependentUpon>GamePassHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\GetAuthTicket.ashx.cs">
+      <DependentUpon>GetAuthTicket.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\GetCurrentUser.ashx.cs">
+      <DependentUpon>GetCurrentUser.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\Join.ashx.cs">
+      <DependentUpon>Join.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\Knockouts.ashx.cs">
+      <DependentUpon>Knockouts.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\Logout.ashx.cs">
+      <DependentUpon>Logout.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\LuaWebService\HandleSocialRequest.ashx.cs">
+      <DependentUpon>HandleSocialRequest.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\PlaceLauncher.ashx.cs">
+      <DependentUpon>PlaceLauncher.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\Servers.ashx.cs">
+      <DependentUpon>Servers.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\Studio.ashx.cs">
+      <DependentUpon>Studio.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\ValidateTicket.ashx.cs">
+      <DependentUpon>ValidateTicket.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\Visit.ashx.cs">
+      <DependentUpon>Visit.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\Wipeouts.ashx.cs">
+      <DependentUpon>Wipeouts.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Keys\PublicKey.ashx.cs">
+      <DependentUpon>PublicKey.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Login\Negotiate.ashx.cs">
+      <DependentUpon>Negotiate.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterServer\Delist.ashx.cs">
+      <DependentUpon>Delist.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterServer\List.ashx.cs">
+      <DependentUpon>List.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterServer\ServerList.ashx.cs">
+      <DependentUpon>ServerList.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="NotApproved.aspx.cs">
+      <DependentUpon>NotApproved.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NotApproved.aspx.designer.cs">
+      <DependentUpon>NotApproved.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NotFound.aspx.cs">
+      <DependentUpon>NotFound.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PlaceItem.aspx.cs">
+      <DependentUpon>PlaceItem.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PlaceItem.aspx.designer.cs">
+      <DependentUpon>PlaceItem.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Register.aspx.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Register.aspx.designer.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Security\AllowedMD5Hashes.ashx.cs">
+      <DependentUpon>AllowedMD5Hashes.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Security\AllowedSecurityVersions.ashx.cs">
+      <DependentUpon>AllowedSecurityVersions.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Setting\QuietGet.ashx.cs">
+      <DependentUpon>QuietGet.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Site.Master.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Site.Master.designer.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\Places\" />
+    <Folder Include="App_Data\Assets\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != '' And Exists('$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets')" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>80</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
