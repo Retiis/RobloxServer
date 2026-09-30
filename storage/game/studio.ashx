@@ -1,1 +1,0 @@
-{"PingReceiver":"http://www.roblox.com/Game/ClientPresence.ashx?version=old&PlaceID=0","PingIntervalInSeconds":120,"UserId":"","MainGuiScriptID":37801172,"AssetUrl":"http://www.roblox.com/Asset/","BaseUrl":"http://www.roblox.com/","ApiProxyEndPoint":"https://api.roblox.com"}

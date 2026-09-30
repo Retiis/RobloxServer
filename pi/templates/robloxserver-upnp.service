@@ -1,0 +1,8 @@
+[Unit]
+Description=RobloxServer UPnP port mapping and dynamic DNS refresh
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/rs-upnp.sh

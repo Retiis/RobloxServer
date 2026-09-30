@@ -1,0 +1,27 @@
+/* 2013 NewLogin page (IDE/Login.css + Login/Login.css from the RobloxLabs 2013 website, MIT license),
+   scoped to .NewLogin so it does not touch the rest of the site. */
+.NewLogin { padding: 0 10px; font-family: Arial, Verdana, sans-serif; }
+.NewLogin h1 { margin: 10px 0 15px; }
+.NewLogin .divider-bottom { border-bottom: 1px solid #ccc; }
+.NewLogin .divider-left { border-left: 1px solid #ccc; }
+.NewLogin #loginarea { display: block; overflow: hidden; }
+.NewLogin #leftArea { float: left; width: 465px; padding-bottom: 20px; padding-left: 20px; }
+.NewLogin #rightArea { width: 454px; overflow: hidden; padding-bottom: 20px; margin-left: 485px; }
+.NewLogin #loginPanel { float: left; width: 440px; }
+.NewLogin #loginPanel label { padding-right: 5px; }
+.NewLogin #loginPanel input[type="text"], .NewLogin #loginPanel input[type="password"] { width: 242px; margin-bottom: 0; }
+.NewLogin #logintable td { padding-bottom: 20px; padding-right: 0; }
+.NewLogin #username, .NewLogin #password { font-weight: bold; font-size: 12px; }
+.NewLogin #forgotPasswordPanel { float: left; line-height: 38px; margin-bottom: 10px; font-size: 12px; color: #095FB5; margin-top: 2px; }
+.NewLogin #signInButtonPanel { float: right; text-align: center; margin-bottom: 10px; }
+.NewLogin .clearFloats { height: 0; line-height: 0; display: block; clear: both; }
+.NewLogin #signUpPanel { margin: 0 auto; text-align: center; width: 400px; padding-top: 5px; padding-left: 2px; }
+.NewLogin #signUpPanel p { margin-top: 9px; margin-bottom: 5px; font-size: 12px; }
+.NewLogin #signUpPanel h2 { margin-top: 0; margin-bottom: 6px; }
+.NewLogin #signUpPanel select { margin-top: 5px; border: 1px solid #A7A7A7; font-size: 12px; }
+.NewLogin #signUpPanel .btn-primary { margin-top: 14px; margin-bottom: 13px; }
+.NewLogin p#disclaimer { margin-top: 5px; padding-top: 2px; color: #666; display: block; font-size: 11px; }
+.NewLogin div.validation-summary-errors { background-color: #FAE5E5; border: 1px solid #C00; margin: 0 0 20px 1px; padding: 5px 0 5px 5px; font-size: 12px; font-weight: normal; text-align: left; color: #c00; }
+.NewLogin #guestarea { clear: both; padding-bottom: 10px; }
+.NewLogin #guestarea h2 { padding-top: 18px; }
+.NewLogin #guestarea p { display: inline-block; font-size: 12px; }

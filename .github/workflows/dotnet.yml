@@ -1,0 +1,75 @@
+name: ASP.NET deploy to Vercel
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Mono, fastcgi-mono-server4 and nginx
+      run: |
+        sudo apt-get update
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mono-complete mono-fastcgi-server4 nginx
+
+    - name: Build
+      run: |
+        xbuild /nologo /p:Configuration=Release RobloxServer.sln
+        cp RobloxServer.Starter/bin/Release/IniciarServidor.exe .
+
+    - name: Bundle RobloxPlayerLauncher.exe
+      run: |
+        git clone --depth 1 https://github.com/V0rtexLinux/RobloxServerLauncher.git "$RUNNER_TEMP/launcher"
+        xbuild /nologo /p:Configuration=Release "$RUNNER_TEMP/launcher/RobloxServerLauncher.sln"
+        mkdir -p RobloxServer.Web/App_Data/Launcher
+        cp "$RUNNER_TEMP/launcher/RobloxPlayerLauncher/bin/Release/RobloxPlayerLauncher.exe" RobloxServer.Web/App_Data/Launcher/
+
+    - name: Prepare Deployment Files for Vercel
+      run: |
+        cp Dockerfile.vercel RobloxServer.Web/
+        cp vercel.json RobloxServer.Web/
+
+    - name: Upload the compiled site
+      uses: actions/upload-artifact@v4
+      with:
+        name: RobloxServer-site
+        path: |
+          RobloxServer.Web/
+          !RobloxServer.Web/obj/
+          !RobloxServer.Web/bin/*.mdb
+          RobloxServer.sln
+          iniciar-servidor.bat
+          IniciarServidor.exe
+          docs/
+          README.md
+
+    - name: Pi scripts
+      run: |
+        bash -n pi/install.sh pi/bin/rs-firewall.sh pi/bin/rs-upnp.sh
+        RENDER_ONLY=1 pi/install.sh
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        name: RobloxServer-site
+        path: ${{ runner.temp }}/site
+
+    - name: Install Vercel CLI
+      run: npm install -g vercel
+
+    - name: Deploy to Vercel
+      run: |
+        cd ${{ runner.temp }}/site/RobloxServer.Web/
+        vercel deploy --prod --yes \
+          --token=${{ secrets.VERCEL_TOKEN }} \
+          --project=${{ secrets.VERCEL_PROJECT_ID }}

@@ -1,0 +1,67 @@
+FROM ubuntu:24.04
+
+# Instala o Mono, FastCGI e Nginx
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    mono-complete \
+    mono-fastcgi-server4 \
+    nginx \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copia o site pré-compilado pelo GitHub Actions
+COPY . .
+
+# Remove a configuração padrão do Nginx e injeta os parâmetros recomendados pelo Claude
+RUN rm /etc/nginx/sites-enabled/default
+RUN cat > /etc/nginx/sites-enabled/robloxserver <<'EOF'
+server {
+    listen 80;
+    server_name localhost;
+
+    # Correção para Cabeçalhos/Cookies grandes (Evita erro 502)
+    fastcgi_buffer_size 32k;
+    fastcgi_buffers 8 32k;
+    fastcgi_read_timeout 300s;
+    fastcgi_connect_timeout 60s;
+    keepalive_timeout 120s;
+
+    location / {
+        root /app;
+        fastcgi_pass 127.0.0.1:9000;
+        include /etc/nginx/fastcgi_params;
+        
+        # Força o Mono a entender que o tráfego externo é HTTPS seguro
+        fastcgi_param HTTPS on;
+        fastcgi_param SERVER_PORT 443;
+        fastcgi_param HTTP_HOST $http_host;
+
+        fastcgi_param PATH_INFO "";
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_index Default.aspx;
+    }
+}
+EOF
+
+# Configura o script de inicialização inteligente (Mono inicia PRIMEIRO)
+RUN cat > /app/start.sh <<'EOF'
+#!/bin/bash
+if [ ! -z "$PORT" ]; then
+    sed -i "listen 80;/listen ${PORT};/" /etc/nginx/sites-enabled/robloxserver
+fi
+
+echo "Iniciando o FastCGI do Mono..."
+fastcgi-mono-server4 /applications=/:/app /socket=tcp:127.0.0.1:9000 &
+
+echo "Aguardando o aquecimento do backend Mono..."
+sleep 5
+
+echo "Iniciando o Nginx..."
+nginx -g "daemon off;"
+EOF
+
+RUN chmod +x /app/start.sh
+
+EXPOSE 80
+ENTRYPOINT ["/app/start.sh"]

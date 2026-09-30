@@ -1,0 +1,33 @@
+name: Bootstrap machineKey (rodar uma vez)
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Sobrescrever chaves existentes (desloga todos os usuários)"
+        type: boolean
+        default: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Debug token
+      env:
+        GH_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
+      run: echo "tamanho do token: ${#GH_TOKEN}"
+    - name: Generate and store keys
+      env:
+        GH_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
+        REPO: ${{ github.repository }}
+        FORCE: ${{ inputs.force }}
+      run: |
+        if gh secret list --repo "$REPO" | grep -q '^MACHINEKEY_VALIDATION' && [ "$FORCE" != "true" ]; then
+          echo "Chaves já existem. Nada a fazer (use force para trocar)."
+          exit 0
+        fi
+        VK=$(openssl rand -hex 64 | tr a-f A-F)
+        DK=$(openssl rand -hex 32 | tr a-f A-F)
+        gh secret set MACHINEKEY_VALIDATION --repo "$REPO" --body "$VK"
+        gh secret set MACHINEKEY_DECRYPTION --repo "$REPO" --body "$DK"
+        echo "Chaves geradas e salvas como secrets."

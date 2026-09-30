@@ -1,0 +1,2 @@
+# One word per line. Matches are replaced with #### in usernames, game names,
+# descriptions and server names (2015 style blacklist filter).

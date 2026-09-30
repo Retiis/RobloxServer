@@ -1,0 +1,13 @@
+[Unit]
+Description=RobloxServer port forwarding (iptables DNAT/MASQUERADE)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/sbin/rs-firewall.sh start
+ExecStop=/usr/local/sbin/rs-firewall.sh stop
+
+[Install]
+WantedBy=multi-user.target

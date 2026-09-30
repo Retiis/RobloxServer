@@ -1,0 +1,24 @@
+/* 2013 character page (Character/Character.css from the RobloxLabs 2013 website, MIT license). */
+.CharacterPage { padding: 0 10px; overflow: hidden; }
+.CharacterPage h1 { margin: 10px 0; }
+.Column1f { margin-top: 10px; width: 375px; float: left; }
+.Column2f { margin-top: 10px; width: 570px; float: left; }
+.Column1f .AvatarImage { display: block; margin: 0 auto; width: 250px; height: 250px; }
+.Mannequin { margin-top: 10px; text-align: center; width: 350px; height: 250px; }
+.Mannequin .ColorChooserFrame { margin: 10px auto 0; position: relative; width: 194px; height: 220px; }
+.Mannequin .ColorChooserRegion { border: 1px solid #ddd; position: absolute; cursor: pointer; box-sizing: border-box; }
+.Mannequin .ColorChooserRegion:hover, .Mannequin .ColorChooserRegion.Selected { border: 2px solid #095fb5; }
+.Mannequin .Head { left: 72px; top: 0; width: 50px; height: 50px; border-radius: 8px; }
+.Mannequin .Torso { left: 47px; top: 52px; width: 100px; height: 100px; }
+.Mannequin .RightArm { left: 0; top: 52px; width: 45px; height: 100px; }
+.Mannequin .LeftArm { left: 149px; top: 52px; width: 45px; height: 100px; }
+.Mannequin .RightLeg { left: 47px; top: 154px; width: 49px; height: 66px; }
+.Mannequin .LeftLeg { left: 98px; top: 154px; width: 49px; height: 66px; }
+.ColorPickerModal { display: none; border: 1px solid #888; background-color: #fff; padding: 10px; width: 330px; margin: 10px auto 0; text-align: left; }
+.ColorPickerModal.Open { display: block; }
+.ColorPickerModal h3 { margin: 0 0 8px; font-size: 14px; }
+.ColorPickerItem { display: inline-block; width: 32px; height: 32px; border: 2px solid #fff; cursor: pointer; margin: 1px; vertical-align: top; }
+.ColorPickerItem:hover { border-color: #e1e1e1; }
+.ColorPickerItem.Current { border-color: #343434; }
+.CustomizeCharacterContainer .NoResults { padding: 0; text-align: center; line-height: 40px; color: #888; }
+.CharacterHint { color: #888; font-size: 12px; text-align: center; }

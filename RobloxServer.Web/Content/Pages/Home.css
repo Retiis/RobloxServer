@@ -1,0 +1,45 @@
+/* 2013 "My ROBLOX" home page (Home/Home.css and Home/RobloxFeed.css from the RobloxLabs 2013 website, MIT license). */
+.home-container { margin-left: 10px; overflow: hidden; }
+.home-container h1 { margin: 10px 0; }
+.left-column { width: 230px; float: left; }
+.left-column-boxes { padding: 12px 5px 5px 12px; overflow: hidden; margin-bottom: 5px; border: 1px solid #ccc; }
+.middle-column { margin-left: 10px; float: left; width: 470px; }
+.middle-column-box { overflow: hidden; }
+.middle-column h2 { margin: 10px 0; }
+.right-column { margin-left: 10px; float: left; width: 230px; }
+.right-column-box { overflow: hidden; margin-bottom: 5px; padding: 5px; }
+.right-column h2, .left-column h2 { font-size: 18px; margin: 0 0 8px; }
+.see-more-img { width: 9px; height: 9px; }
+.user-avatar-holder { position: relative; margin-bottom: 10px; }
+.user-avatar { display: inline-block; height: 200px; width: 150px; }
+.user-avatar-image { height: 200px; width: 150px; }
+.user-avatar-container { text-align: center; padding: 5px; }
+.user-avatar-text { font-size: 12px; }
+.status-update { padding: 5px; background-color: #e6e6e6; overflow: hidden; }
+.status-textbox { width: 370px; float: left; }
+.share-button { padding: 0 20px !important; float: right; }
+.feed-container { padding: 10px 0; float: left; width: 100%; border-bottom: 1px solid #eee; }
+.feed-image-container { float: left; padding: 0 12px 10px 5px; }
+.feed-image-container img { width: 48px; height: 48px; }
+.feed-text-container { float: left; width: 380px; overflow-x: hidden; word-wrap: break-word; font-size: 12px; }
+.feed-text-container .feed-name { font-weight: bold; }
+.feed-text-container .feed-date { color: #999; font-size: 11px; margin-top: 4px; }
+.default-roblox-feed { margin: 20px; margin-right: 0; font-size: 12px; overflow: hidden; }
+.default-feed-icons { float: left; margin-right: 20px; width: 53px; height: 53px; }
+.default-feed-content { float: right; width: 375px; }
+.best-friends { font-family: Arial, sans-serif; font-size: 12px; }
+.best-friends .user { margin: 10px 0; overflow: hidden; }
+.best-friends .user .avatar-image-link { float: left; }
+.best-friends .user .avatar-image-link img { height: 48px; width: 48px; }
+.best-friends .user .info { float: left; width: 144px; margin-left: 5px; margin-top: 5px; }
+.best-friends .user .info img { vertical-align: middle; margin-right: 2px; }
+.best-friends .user .name { font-weight: bold; }
+.best-friends .user .status { color: #000; margin-top: 5px; word-wrap: break-word; overflow-x: hidden; }
+.recent-place-container { margin-bottom: 10px; overflow: hidden; }
+.recent-place-thumb { float: left; margin-right: 5px; }
+.recent-place-thumb-img { width: 50px; padding: 2px; }
+.recent-place-name { font: bold 12px Arial; display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.recent-place-players-online { color: #666; font-size: 11px; }
+.roblox-news-feed { margin-bottom: 15px; }
+.roblox-news-feed-item { background: url(../../Images/Icons/BulletPointArrow.png) no-repeat 0 4px; padding-left: 13px; margin-bottom: 10px; font-size: 12px; }
+.home-empty { color: #888; font-size: 12px; }
